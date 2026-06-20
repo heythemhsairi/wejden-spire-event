@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Button } from "./ui";
 import { BrandLogo, BrandMark } from "./brand-logo";
+import { FullscreenButton } from "./fullscreen-button";
 
 const LINKS = [
   { href: "/experience/cost-calculator", label: "Hidden Cost" },
@@ -9,6 +10,8 @@ const LINKS = [
   { href: "/experience/advisor", label: "AI Advisor" },
   { href: "/experience/pulse", label: "Live Pulse" },
 ];
+
+export const WEJDENSPIRE_SITE = "https://wejdenspire.com/";
 
 export function SiteNav() {
   return (
@@ -28,7 +31,21 @@ export function SiteNav() {
             </Link>
           ))}
         </nav>
-        <Button href="/briefing" variant="primary" className="px-4 py-2 text-sm">Book a briefing</Button>
+        <div className="flex items-center gap-2">
+          <FullscreenButton className="hidden sm:inline-flex" />
+          <a
+            href={WEJDENSPIRE_SITE}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hidden items-center gap-1.5 rounded-full border border-ws-border bg-white px-4 py-2 text-sm font-medium text-ws-ink transition-colors hover:border-ws-primary/50 hover:bg-ws-cloud sm:inline-flex"
+          >
+            wejdenspire.com
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+              <path d="M7 17 17 7" /><path d="M7 7h10v10" />
+            </svg>
+          </a>
+          <Button href="/briefing" variant="primary" className="px-4 py-2 text-sm">Book a briefing</Button>
+        </div>
       </div>
     </header>
   );
@@ -45,6 +62,7 @@ export function SiteFooter() {
         <div className="flex gap-4">
           <Link href="/about" className="hover:text-ws-sage">About</Link>
           <Link href="/briefing" className="hover:text-ws-sage">Briefing</Link>
+          <a href={WEJDENSPIRE_SITE} target="_blank" rel="noopener noreferrer" className="font-medium text-ws-primary hover:text-ws-primary-dark">wejdenspire.com ↗</a>
         </div>
       </div>
     </footer>

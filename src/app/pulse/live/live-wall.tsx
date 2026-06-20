@@ -6,6 +6,7 @@ import { CountUp } from "@/components/ws/count-up";
 import { RadialGauge } from "@/components/ws/radial-gauge";
 import { LiveDot } from "@/components/ws/ui";
 import { BrandMark } from "@/components/ws/brand-logo";
+import { FullscreenButton } from "@/components/ws/fullscreen-button";
 import { riskColor } from "@/lib/utils";
 
 interface Stats {
@@ -89,6 +90,7 @@ export function LiveWall({ sessionId }: { sessionId: string | null }) {
             </div>
           </div>
           <LiveDot />
+          <FullscreenButton label />
         </div>
       </div>
 
@@ -118,6 +120,9 @@ export function LiveWall({ sessionId }: { sessionId: string | null }) {
         <p className="font-display text-2xl font-semibold text-ws-ink">
           Imagine having this visibility inside your organization — <span className="text-ws-primary">every day.</span>
         </p>
+        <a href="https://wejdenspire.com/" target="_blank" rel="noopener noreferrer" className="mt-2 inline-block text-sm font-semibold text-ws-primary hover:text-ws-primary-dark">
+          wejdenspire.com ↗
+        </a>
       </div>
     </div>
   );
