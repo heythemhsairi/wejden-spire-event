@@ -13,9 +13,16 @@ interface ChatMessage {
  * Supports Google Gemini (free tier) and Vercel AI Gateway (Claude), both via
  * their OpenAI-compatible /chat/completions endpoints (same SSE stream format).
  */
+/** Strip BOM, quotes, and surrounding whitespace that can sneak into env values. */
+function cleanKey(v: string | undefined): string | undefined {
+  if (!v) return undefined;
+  const cleaned = v.replace(/^﻿/, "").replace(/^["']|["']$/g, "").trim();
+  return cleaned || undefined;
+}
+
 function resolveProvider() {
   // Groq — free, no card, fast. https://console.groq.com/keys
-  const groq = process.env.GROQ_API_KEY;
+  const groq = cleanKey(process.env.GROQ_API_KEY);
   if (groq) {
     return {
       url: "https://api.groq.com/openai/v1/chat/completions",
@@ -24,7 +31,7 @@ function resolveProvider() {
     };
   }
   // OpenRouter — many models, some free. https://openrouter.ai/keys
-  const openrouter = process.env.OPENROUTER_API_KEY;
+  const openrouter = cleanKey(process.env.OPENROUTER_API_KEY);
   if (openrouter) {
     return {
       url: "https://openrouter.ai/api/v1/chat/completions",
@@ -33,7 +40,7 @@ function resolveProvider() {
     };
   }
   // Google Gemini — free tier is region-restricted (may be unavailable). https://aistudio.google.com/apikey
-  const gemini = process.env.GEMINI_API_KEY || process.env.GOOGLE_API_KEY;
+  const gemini = cleanKey(process.env.GEMINI_API_KEY || process.env.GOOGLE_API_KEY);
   if (gemini) {
     return {
       url: "https://generativelanguage.googleapis.com/v1beta/openai/chat/completions",
@@ -42,7 +49,7 @@ function resolveProvider() {
     };
   }
   // Vercel AI Gateway — Claude. https://vercel.com (AI Gateway)
-  const gateway = process.env.AI_GATEWAY_API_KEY;
+  const gateway = cleanKey(process.env.AI_GATEWAY_API_KEY);
   if (gateway) {
     return {
       url: "https://ai-gateway.vercel.sh/v1/chat/completions",
