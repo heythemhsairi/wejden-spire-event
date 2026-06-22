@@ -39,6 +39,7 @@ export default async function AdminHome() {
           <div className="flex items-center gap-2">
             <Button href="/admin/leads" variant="ghost" className="px-3 py-2 text-sm">Leads</Button>
             <Button href="/admin/pulse" variant="ghost" className="px-3 py-2 text-sm">Pulse</Button>
+            <Button href="/admin/codes" variant="ghost" className="px-3 py-2 text-sm">Employee codes</Button>
             <form action={logout}>
               <Button type="submit" variant="ghost" className="px-3 py-2 text-sm">Sign out</Button>
             </form>
@@ -66,6 +67,11 @@ export default async function AdminHome() {
             <h3 className="font-display text-lg font-semibold text-ws-ink">Live pulse control</h3>
             <p className="mt-1 text-sm text-ws-sage">Reset, freeze, or start a new event session. {session ? "" : "No active session."}</p>
             <Link href="/admin/pulse" className="mt-4 inline-block text-sm font-medium text-ws-primary">Open pulse →</Link>
+          </Card>
+          <Card className="p-6">
+            <h3 className="font-display text-lg font-semibold text-ws-ink">Employee access codes</h3>
+            <p className="mt-1 text-sm text-ws-sage">Generate codes that give employees a private wellbeing space (mood, score, assistant).</p>
+            <Link href="/admin/codes" className="mt-4 inline-block text-sm font-medium text-ws-primary">Manage codes →</Link>
           </Card>
         </div>
       </div>

@@ -1,4 +1,5 @@
 import { ADVISOR_SYSTEM_PROMPT } from "@/lib/advisor-knowledge";
+import { EMPLOYEE_ASSISTANT_PROMPT } from "@/lib/employee-assistant";
 
 export const runtime = "nodejs";
 export const maxDuration = 60;
@@ -74,12 +75,15 @@ export async function POST(req: Request) {
     );
   }
 
-  let body: { messages?: ChatMessage[] };
+  let body: { messages?: ChatMessage[]; mode?: string };
   try {
     body = await req.json();
   } catch {
     return new Response("Bad request", { status: 400 });
   }
+
+  // Pick the persona: executive advisor (default) or warm employee companion.
+  const systemPrompt = body.mode === "employee" ? EMPLOYEE_ASSISTANT_PROMPT : ADVISOR_SYSTEM_PROMPT;
 
   const messages = (body.messages ?? [])
     .filter((m) => m && (m.role === "user" || m.role === "assistant") && typeof m.content === "string")
@@ -99,7 +103,7 @@ export async function POST(req: Request) {
       model: provider.model,
       stream: true,
       max_tokens: 900,
-      messages: [{ role: "system", content: ADVISOR_SYSTEM_PROMPT }, ...messages],
+      messages: [{ role: "system", content: systemPrompt }, ...messages],
     }),
   });
 
