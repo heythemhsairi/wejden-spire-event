@@ -1,64 +1,111 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { WELLBEING_QUESTIONS, scoreWellbeing } from "@/lib/domain/wellbeing";
+import { EMOTIONS, FREQUENCY_OPTIONS, scoreWellbeing } from "@/lib/domain/wellbeing";
 import { submitCheckin } from "@/app/actions/employee";
 import { RadialGauge } from "@/components/ws/radial-gauge";
-import { IconWellbeing } from "@/components/ws/icons";
+import { IconWellbeing, IconHeartPulse, EmotionIcon } from "@/components/ws/icons";
+
+type Phase = "intro" | "questions" | "result";
 
 export function WellbeingTest({ codeId }: { codeId: string }) {
+  const [phase, setPhase] = useState<Phase>("intro");
   const [step, setStep] = useState(0);
   const [answers, setAnswers] = useState<Record<string, number>>({});
   const [saved, setSaved] = useState(false);
 
-  const total = WELLBEING_QUESTIONS.length;
-  const done = step >= total;
-  const q = done ? null : WELLBEING_QUESTIONS[step];
-  const result = useMemo(() => (done ? scoreWellbeing(answers) : null), [done, answers]);
+  const total = EMOTIONS.length;
+  const emotion = EMOTIONS[step];
+  const result = useMemo(() => (phase === "result" ? scoreWellbeing(answers) : null), [phase, answers]);
 
   function answer(i: number) {
-    if (!q) return;
-    setAnswers((a) => ({ ...a, [q.id]: i }));
-    setTimeout(() => setStep((s) => s + 1), 160);
+    setAnswers((a) => ({ ...a, [emotion.id]: i }));
+    setTimeout(() => {
+      if (step + 1 >= total) setPhase("result");
+      else setStep((s) => s + 1);
+    }, 160);
   }
 
-  // Save once when we reach the result.
-  if (done && result && !saved) {
+  if (phase === "result" && result && !saved) {
     setSaved(true);
     submitCheckin({ codeId, kind: "assessment", wellbeingScore: result.score });
   }
 
-  if (!done && q) {
+  // ── Intro ──
+  if (phase === "intro") {
+    return (
+      <div className="mx-auto max-w-md">
+        <div className="rounded-2xl border border-ws-border bg-white p-8 text-center shadow-ws-card">
+          <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-full bg-ws-soft-purple text-ws-purple-dark">
+            <IconHeartPulse size={32} />
+          </div>
+          <h2 className="font-display text-2xl font-bold text-ws-ink">Weekly Wellbeing Check</h2>
+          <p className="mt-3 text-sm leading-relaxed text-ws-sage">
+            A short questionnaire about the emotions you may have felt recently. For each one, indicate how
+            much you&apos;ve felt it over the past week.
+          </p>
+          <button onClick={() => setPhase("questions")} className="mt-6 w-full rounded-full bg-ws-primary px-5 py-3 text-sm font-semibold text-white transition hover:bg-ws-primary-dark">
+            Start
+          </button>
+          <p className="mt-3 text-xs text-ws-text-dim">About 2 minutes · {total} questions</p>
+        </div>
+      </div>
+    );
+  }
+
+  // ── Questions ──
+  if (phase === "questions") {
+    const pct = Math.round(((step) / total) * 100);
+    const isPositive = emotion.affect === "positive";
     return (
       <div>
-        <div className="mb-6 flex items-center justify-between">
-          <h2 className="font-display text-xl font-bold text-ws-ink">A quick check on how you&apos;re doing</h2>
-          <span className="tnum text-sm text-ws-sage">{step + 1}/{total}</span>
+        <div className="mb-2 flex items-center justify-between text-sm font-medium">
+          <span className="text-ws-purple-dark">Question {step + 1} / {total}</span>
+          <span className="tnum text-ws-purple-dark">{Math.round(((step + 1) / total) * 100)}%</span>
         </div>
-        <div className="mb-8 h-1.5 overflow-hidden rounded-full bg-ws-cloud">
-          <div className="h-full rounded-full bg-ws-primary transition-all" style={{ width: `${(step / total) * 100}%` }} />
+        <div className="mb-10 h-2 overflow-hidden rounded-full bg-ws-cloud">
+          <div className="h-full rounded-full bg-ws-purple transition-all" style={{ width: `${pct + 100 / total}%` }} />
         </div>
-        <p className="font-display text-lg font-semibold text-ws-ink">{q.text}</p>
-        <div className="mt-5 space-y-2.5">
-          {q.options.map((opt, i) => (
-            <button
-              key={i}
-              onClick={() => answer(i)}
-              className={`w-full rounded-xl border px-4 py-3.5 text-left text-sm transition-all ${
-                answers[q.id] === i ? "border-ws-primary bg-ws-soft-green text-ws-ink" : "border-ws-border bg-white text-ws-sage hover:border-ws-primary/40 hover:text-ws-ink"
-              }`}
-            >
-              {opt}
-            </button>
-          ))}
+
+        <p className="text-center text-sm font-medium text-ws-sage">How much have you felt this week?</p>
+
+        <div className="mt-6 flex flex-col items-center">
+          <span className={`rounded-full px-3 py-1 text-[11px] font-semibold uppercase tracking-wider ${isPositive ? "bg-ws-soft-green text-ws-primary-dark" : "bg-ws-soft-purple text-ws-purple-dark"}`}>
+            {isPositive ? "Positive affect" : "Negative affect"}
+          </span>
+          <div className="mt-5 flex items-center gap-3">
+            <EmotionIcon name={emotion.icon} size={36} className={isPositive ? "text-ws-primary" : "text-ws-purple-dark"} />
+            <span className="font-display text-4xl font-bold text-ws-ink">{emotion.word}</span>
+          </div>
         </div>
+
+        <div className="mt-9 grid grid-cols-2 gap-2.5 sm:grid-cols-5">
+          {FREQUENCY_OPTIONS.map((opt, i) => {
+            const sel = answers[emotion.id] === i;
+            return (
+              <button
+                key={i}
+                onClick={() => answer(i)}
+                className={`flex min-h-[64px] items-center justify-center rounded-2xl border px-3 py-3 text-center text-sm transition-all ${
+                  sel ? "border-ws-primary bg-ws-soft-green text-ws-ink" : "border-ws-border bg-white text-ws-sage hover:border-ws-primary/40 hover:text-ws-ink"
+                }`}
+              >
+                {opt}
+              </button>
+            );
+          })}
+        </div>
+
         {step > 0 && (
-          <button onClick={() => setStep((s) => s - 1)} className="mt-5 rounded-full border border-ws-border bg-white px-4 py-2 text-sm text-ws-ink hover:bg-ws-cloud">← Back</button>
+          <button onClick={() => setStep((s) => s - 1)} className="mt-8 flex items-center gap-1.5 text-sm text-ws-sage hover:text-ws-ink">
+            ← Back
+          </button>
         )}
       </div>
     );
   }
 
+  // ── Result ──
   return (
     <div className="text-center">
       <h2 className="font-display text-2xl font-bold text-ws-ink">Your wellbeing snapshot</h2>
@@ -67,7 +114,19 @@ export function WellbeingTest({ codeId }: { codeId: string }) {
       </div>
       <p className="mx-auto mt-5 max-w-md text-ws-sage">{result!.message}</p>
 
-      <div className="mt-7 rounded-2xl border border-ws-border bg-white p-6 text-left">
+      {/* Positive vs negative affect */}
+      <div className="mt-7 grid grid-cols-2 gap-3">
+        <div className="rounded-2xl border border-ws-border bg-white p-5">
+          <p className="text-xs font-semibold uppercase tracking-wider text-ws-primary-dark">Positive affect</p>
+          <p className="tnum mt-1 font-display text-3xl font-bold text-ws-primary">{result!.positiveScore}</p>
+        </div>
+        <div className="rounded-2xl border border-ws-border bg-white p-5">
+          <p className="text-xs font-semibold uppercase tracking-wider text-ws-purple-dark">Negative affect</p>
+          <p className="tnum mt-1 font-display text-3xl font-bold text-ws-purple-dark">{result!.negativeScore}</p>
+        </div>
+      </div>
+
+      <div className="mt-5 rounded-2xl border border-ws-border bg-white p-6 text-left">
         <h3 className="font-display text-base font-bold text-ws-ink">A few things that might help</h3>
         <ul className="mt-3 space-y-2.5">
           {result!.tips.map((t, i) => (
@@ -83,7 +142,9 @@ export function WellbeingTest({ codeId }: { codeId: string }) {
         Want to talk any of this through? The wellbeing assistant is here for you.
       </div>
 
-      <button onClick={() => { setStep(0); setAnswers({}); setSaved(false); }} className="mt-5 rounded-full border border-ws-border bg-white px-4 py-2 text-sm text-ws-ink hover:bg-ws-cloud">Retake</button>
+      <button onClick={() => { setPhase("intro"); setStep(0); setAnswers({}); setSaved(false); }} className="mt-5 rounded-full border border-ws-border bg-white px-4 py-2 text-sm text-ws-ink hover:bg-ws-cloud">
+        Retake
+      </button>
       <p className="mt-4 text-xs text-ws-text-dim">Private &amp; anonymous · illustrative, not a clinical assessment.</p>
     </div>
   );
