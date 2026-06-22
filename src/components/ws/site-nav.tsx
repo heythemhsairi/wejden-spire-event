@@ -9,6 +9,7 @@ const LINKS = [
   { href: "/experience/dashboard", label: "Dashboard" },
   { href: "/experience/advisor", label: "AI Advisor" },
   { href: "/experience/pulse", label: "Live Pulse" },
+  { href: "/for-teams", label: "For teams" },
 ];
 
 export const WEJDENSPIRE_SITE = "https://wejdenspire.com/";

@@ -72,6 +72,22 @@ export default async function HomePage() {
         </div>
       </section>
 
+      {/* For teams CTA */}
+      <section className="mx-auto max-w-7xl px-5 py-6">
+        <div className="overflow-hidden rounded-2xl border border-ws-primary/20 bg-ws-soft-green p-8 sm:flex sm:items-center sm:justify-between sm:gap-6">
+          <div>
+            <h2 className="font-display text-2xl font-bold text-ws-ink">Want to give your team a wellbeing space?</h2>
+            <p className="mt-2 max-w-xl text-ws-sage">
+              CEOs &amp; People leaders: generate a private, anonymous space for your employees — mood check-in,
+              wellbeing assessment, and a supportive assistant. Share the link in seconds.
+            </p>
+          </div>
+          <div className="mt-5 shrink-0 sm:mt-0">
+            <Button href="/for-teams" variant="primary">Generate a team link →</Button>
+          </div>
+        </div>
+      </section>
+
       {/* Trust row */}
       <section className="mx-auto max-w-7xl px-5 py-12">
         <div className="flex flex-col items-center gap-3 text-center">
