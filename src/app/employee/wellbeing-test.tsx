@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import { WELLBEING_QUESTIONS, scoreWellbeing } from "@/lib/domain/wellbeing";
 import { submitCheckin } from "@/app/actions/employee";
 import { RadialGauge } from "@/components/ws/radial-gauge";
+import { IconWellbeing } from "@/components/ws/icons";
 
 export function WellbeingTest({ codeId }: { codeId: string }) {
   const [step, setStep] = useState(0);
@@ -70,7 +71,10 @@ export function WellbeingTest({ codeId }: { codeId: string }) {
         <h3 className="font-display text-base font-bold text-ws-ink">A few things that might help</h3>
         <ul className="mt-3 space-y-2.5">
           {result!.tips.map((t, i) => (
-            <li key={i} className="flex gap-2.5 text-sm text-ws-sage"><span className="text-ws-primary">🌱</span>{t}</li>
+            <li key={i} className="flex gap-2.5 text-sm text-ws-sage">
+              <IconWellbeing size={18} className="mt-0.5 shrink-0 text-ws-primary" />
+              {t}
+            </li>
           ))}
         </ul>
       </div>

@@ -5,6 +5,7 @@ import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { validateCode } from "@/app/actions/employee";
 import { BrandMark } from "@/components/ws/brand-logo";
+import { IconMood, IconWellbeing, IconTalk, IconWave, IconArrowRight } from "@/components/ws/icons";
 import { MoodChecker } from "./mood-checker";
 import { WellbeingTest } from "./wellbeing-test";
 import { EmployeeAssistant } from "./employee-assistant";
@@ -90,13 +91,15 @@ export function EmployeeSpace() {
     <div className="min-h-screen bg-ws-hero">
       <EmployeeHeader label={label} />
       <div className="mx-auto max-w-3xl px-5 py-10">
-        <h1 className="font-display text-3xl font-bold text-ws-ink">Hi there 👋</h1>
+        <h1 className="flex items-center gap-2.5 font-display text-3xl font-bold text-ws-ink">
+          Hi there <IconWave size={28} className="text-ws-primary" />
+        </h1>
         <p className="mt-2 text-ws-sage">This space is just for you. Private, anonymous, no pressure. What would you like to do?</p>
 
         <div className="mt-8 grid gap-4 sm:grid-cols-3">
-          <ToolCard emoji="🌤️" title="Mood check-in" desc="Log how you're feeling today in 20 seconds." onClick={() => setTool("mood")} bg="bg-ws-soft-blue" />
-          <ToolCard emoji="🌱" title="Wellbeing score" desc="A short check to understand how you're really doing." onClick={() => setTool("score")} bg="bg-ws-soft-green" />
-          <ToolCard emoji="💬" title="Talk it through" desc="A warm assistant here to listen and support you." onClick={() => setTool("assistant")} bg="bg-ws-soft-purple" />
+          <ToolCard icon={<IconMood size={24} />} iconColor="text-ws-blue-dark" title="Mood check-in" desc="Log how you're feeling today in 20 seconds." onClick={() => setTool("mood")} bg="bg-ws-soft-blue" />
+          <ToolCard icon={<IconWellbeing size={24} />} iconColor="text-ws-primary" title="Wellbeing score" desc="A short check to understand how you're really doing." onClick={() => setTool("score")} bg="bg-ws-soft-green" />
+          <ToolCard icon={<IconTalk size={24} />} iconColor="text-ws-purple-dark" title="Talk it through" desc="A warm assistant here to listen and support you." onClick={() => setTool("assistant")} bg="bg-ws-soft-purple" />
         </div>
 
         <div className="mt-8 rounded-2xl border border-ws-border bg-white p-5 text-sm text-ws-sage">
@@ -128,13 +131,13 @@ function EmployeeHeader({ label, onHome }: { label: string | null; onHome?: () =
   );
 }
 
-function ToolCard({ emoji, title, desc, onClick, bg }: { emoji: string; title: string; desc: string; onClick: () => void; bg: string }) {
+function ToolCard({ icon, iconColor, title, desc, onClick, bg }: { icon: React.ReactNode; iconColor: string; title: string; desc: string; onClick: () => void; bg: string }) {
   return (
     <button onClick={onClick} className="group flex flex-col items-start rounded-2xl border border-ws-border bg-white p-5 text-left shadow-ws-card transition-all hover:-translate-y-1 hover:shadow-ws-lift">
-      <span className={`mb-3 flex h-12 w-12 items-center justify-center rounded-xl text-2xl ${bg}`}>{emoji}</span>
+      <span className={`mb-3 flex h-12 w-12 items-center justify-center rounded-xl ${bg} ${iconColor}`}>{icon}</span>
       <h3 className="font-display text-base font-bold text-ws-ink">{title}</h3>
       <p className="mt-1 text-sm text-ws-sage">{desc}</p>
-      <span className="mt-3 text-ws-primary transition-transform group-hover:translate-x-1">→</span>
+      <IconArrowRight size={18} className="mt-3 text-ws-primary transition-transform group-hover:translate-x-1" />
     </button>
   );
 }

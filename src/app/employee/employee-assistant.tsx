@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
+import { IconTalk } from "@/components/ws/icons";
 
 interface Msg { role: "user" | "assistant"; content: string }
 
@@ -58,7 +59,9 @@ export function EmployeeAssistant() {
 
   return (
     <div className="flex h-[calc(100vh-9rem)] flex-col">
-      <h2 className="font-display text-2xl font-bold text-ws-ink">Talk it through 💬</h2>
+      <h2 className="flex items-center gap-2 font-display text-2xl font-bold text-ws-ink">
+        <IconTalk size={24} className="text-ws-purple-dark" /> Talk it through
+      </h2>
       <p className="mt-1 text-sm text-ws-sage">A warm, private space. Share whatever&apos;s on your mind.</p>
 
       <div ref={scrollRef} className="mt-4 flex-1 space-y-4 overflow-y-auto rounded-2xl border border-ws-border bg-white p-5">

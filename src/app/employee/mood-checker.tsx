@@ -3,13 +3,15 @@
 import { useState } from "react";
 import { submitCheckin } from "@/app/actions/employee";
 import { SignalSlider } from "@/components/ws/signal-slider";
+import { IconCheck } from "@/components/ws/icons";
+import { riskColor } from "@/lib/utils";
 
 const MOODS = [
-  { v: 10, e: "😞", l: "Rough" },
-  { v: 30, e: "😕", l: "Low" },
-  { v: 50, e: "😐", l: "Okay" },
-  { v: 70, e: "🙂", l: "Good" },
-  { v: 90, e: "😄", l: "Great" },
+  { v: 10, l: "Rough" },
+  { v: 30, l: "Low" },
+  { v: 50, l: "Okay" },
+  { v: 70, l: "Good" },
+  { v: 90, l: "Great" },
 ];
 
 export function MoodChecker({ codeId }: { codeId: string }) {
@@ -27,11 +29,12 @@ export function MoodChecker({ codeId }: { codeId: string }) {
   }
 
   if (done) {
-    const m = MOODS.reduce((a, b) => (Math.abs(b.v - mood) < Math.abs(a.v - mood) ? b : a));
     return (
       <div className="rounded-2xl border border-ws-border bg-white p-8 text-center shadow-ws-card">
-        <div className="text-5xl">{m.e}</div>
-        <h2 className="mt-3 font-display text-2xl font-bold text-ws-ink">Thanks for checking in.</h2>
+        <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-ws-soft-green text-ws-primary">
+          <IconCheck size={30} />
+        </div>
+        <h2 className="mt-4 font-display text-2xl font-bold text-ws-ink">Thanks for checking in.</h2>
         <p className="mt-2 text-ws-sage">
           {mood >= 60
             ? "Glad you're doing well today. A good moment to notice what's helping."
@@ -49,20 +52,32 @@ export function MoodChecker({ codeId }: { codeId: string }) {
       <h2 className="font-display text-2xl font-bold text-ws-ink">How are you today?</h2>
       <p className="mt-1 text-ws-sage">Just a quick check-in. No right answers.</p>
 
-      {/* Mood emoji picker */}
+      {/* Mood scale — brand-colored dots, no emoji */}
       <div className="mt-6 flex justify-between gap-2">
-        {MOODS.map((m) => (
-          <button
-            key={m.v}
-            onClick={() => setMood(m.v)}
-            className={`flex flex-1 flex-col items-center gap-1 rounded-2xl border py-4 transition-all ${
-              Math.abs(mood - m.v) < 10 ? "border-ws-primary bg-ws-soft-green" : "border-ws-border bg-white hover:border-ws-primary/40"
-            }`}
-          >
-            <span className="text-3xl">{m.e}</span>
-            <span className="text-xs font-medium text-ws-sage">{m.l}</span>
-          </button>
-        ))}
+        {MOODS.map((m) => {
+          const selected = Math.abs(mood - m.v) < 10;
+          const dot = riskColor(100 - m.v); // green at high mood → red at low
+          return (
+            <button
+              key={m.v}
+              onClick={() => setMood(m.v)}
+              className={`flex flex-1 flex-col items-center gap-2 rounded-2xl border py-4 transition-all ${
+                selected ? "border-ws-primary bg-ws-soft-green" : "border-ws-border bg-white hover:border-ws-primary/40"
+              }`}
+            >
+              <span
+                className="rounded-full transition-all"
+                style={{
+                  width: selected ? 22 : 16,
+                  height: selected ? 22 : 16,
+                  backgroundColor: dot,
+                  opacity: selected ? 1 : 0.55,
+                }}
+              />
+              <span className={`text-xs font-medium ${selected ? "text-ws-ink" : "text-ws-sage"}`}>{m.l}</span>
+            </button>
+          );
+        })}
       </div>
 
       <div className="mt-8 space-y-6 rounded-2xl border border-ws-border bg-white p-6">
