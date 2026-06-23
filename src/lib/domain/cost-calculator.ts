@@ -12,7 +12,7 @@ export interface CostInputs {
   industry: Industry;
 }
 
-export type TurnoverBand = "Sain" | "Acceptable" | "Préoccupant" | "Critique";
+export type TurnoverBand = "Maîtrisé" | "Vigilance" | "Alerte RH" | "Risque élevé" | "Critique";
 
 export interface CostResult {
   turnoverCost: number;
@@ -29,11 +29,24 @@ export interface CostResult {
   quickWinSavings: number;
 }
 
-/** Categorize a turnover rate against the industry median: is 10% good or bad? */
+/**
+ * Internal HR vigilance grid for annual turnover.
+ * NOT a medical or regulatory norm — a piloting signal that justifies finer analysis
+ * (voluntary vs involuntary departures, roles, tenure, sites, managers, workload, climate).
+ * Thresholds: <8% Maîtrisé · 8–10% Vigilance · 10–15% Alerte RH · 15–20% Risque élevé · >20% Critique.
+ */
 export function categorizeTurnover(turnoverRate: number, median: number): { band: TurnoverBand; ratio: number } {
-  const ratio = median > 0 ? turnoverRate / median : 1;
   const band: TurnoverBand =
-    ratio <= 0.8 ? "Sain" : ratio <= 1.15 ? "Acceptable" : ratio <= 1.6 ? "Préoccupant" : "Critique";
+    turnoverRate < 8
+      ? "Maîtrisé"
+      : turnoverRate < 10
+        ? "Vigilance"
+        : turnoverRate < 15
+          ? "Alerte RH"
+          : turnoverRate <= 20
+            ? "Risque élevé"
+            : "Critique";
+  const ratio = median > 0 ? turnoverRate / median : 1;
   return { band, ratio };
 }
 

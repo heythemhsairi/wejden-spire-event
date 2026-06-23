@@ -10,9 +10,17 @@ import { formatCurrencyCompact, formatCurrencyFull, riskColor } from "@/lib/util
 import { useRouter } from "next/navigation";
 import { t } from "@/lib/i18n";
 import type { TurnoverBand } from "@/lib/domain/cost-calculator";
+import { InterpretationGrid } from "@/components/ws/interpretation-grid";
+import { COST_COMPONENTS, TURNOVER_ACTIONS } from "@/lib/domain/interpretation-grid";
 
 function turnoverBandColor(band: TurnoverBand): string {
-  return band === "Critique" ? "#E06A5C" : band === "Préoccupant" ? "#E0843C" : band === "Acceptable" ? "#E0A23C" : "#4AAA83";
+  return band === "Critique" || band === "Risque élevé"
+    ? "#E06A5C"
+    : band === "Alerte RH"
+      ? "#E0843C"
+      : band === "Vigilance"
+        ? "#E0A23C"
+        : "#4AAA83";
 }
 
 export function CostCalculator() {
@@ -108,7 +116,7 @@ export function CostCalculator() {
                   <p className="tnum mt-1 font-display text-2xl font-bold" style={{ color: turnoverBandColor(result.turnoverBand) }}>
                     {result.turnoverBand}
                   </p>
-                  <p className="tnum mt-0.5 text-xs text-ws-text-dim">{result.turnoverVsMedian.toFixed(1)} {t("cost.vsSectorMedian")}</p>
+                  <p className="mt-1 text-[11px] leading-snug text-ws-text-dim">{t("cost.vigilanceNote")}</p>
                 </div>
               </div>
             </div>
@@ -136,6 +144,40 @@ export function CostCalculator() {
           </div>
         </div>
       </div>
+
+      {/* What each component covers (client-provided) */}
+      <div className="mt-10 grid gap-4 sm:grid-cols-3">
+        {COST_COMPONENTS.map((c) => (
+          <div key={c.component} className="rounded-2xl border border-ws-border bg-white p-5">
+            <h4 className="font-display text-sm font-bold text-ws-ink">{c.component}</h4>
+            <p className="mt-1.5 text-sm leading-relaxed text-ws-sage">{c.covers}</p>
+          </div>
+        ))}
+      </div>
+
+      {/* HR interpretation grid (client-provided) */}
+      <div className="mt-8">
+        <h3 className="font-display text-xl font-bold text-ws-ink">{t("cost.gridTitle")}</h3>
+        <p className="mt-1 max-w-3xl text-sm text-ws-sage">{t("cost.gridIntro")}</p>
+        <div className="mt-4">
+          <InterpretationGrid />
+        </div>
+      </div>
+
+      {/* Actions if turnover > 10% (client-provided) */}
+      {input.turnoverRate >= 10 && (
+        <div className="mt-8 rounded-2xl border border-ws-primary/20 bg-ws-soft-green p-6">
+          <h3 className="font-display text-lg font-bold text-ws-ink">{t("cost.actionsTitle")}</h3>
+          <ol className="mt-3 space-y-2.5">
+            {TURNOVER_ACTIONS.map((a, i) => (
+              <li key={i} className="flex gap-3 text-sm text-ws-ink">
+                <span className="tnum flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-ws-primary text-xs font-bold text-white">{i + 1}</span>
+                <span>{a}</span>
+              </li>
+            ))}
+          </ol>
+        </div>
+      )}
 
       <LeadModal
         open={leadOpen}

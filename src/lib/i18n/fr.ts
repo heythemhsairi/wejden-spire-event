@@ -99,6 +99,13 @@ export const fr = {
     runScanner: "Lancer le scanner de risque",
     turnoverStatus: "Votre rotation",
     vsSectorMedian: "× la médiane du secteur",
+    vigilanceNote:
+      "Seuil interne de vigilance, pas une norme médicale ou réglementaire. À 10 %, un signal qui justifie une analyse plus fine.",
+    gridTitle: "Grille d'interprétation RH",
+    gridIntro:
+      "Une référence de pilotage — pas une norme officielle. Aucun seuil universel OMS/ISO ne dit qu'un taux est « grave » : cela dépend du secteur, du métier, du pays et de la part de départs volontaires.",
+    componentsTitle: "Ce que couvre chaque composante",
+    actionsTitle: "Actions recommandées si le turnover dépasse 10 %",
     insightTitle: "Insight stratégique",
     insightReduction:
       "Un investissement stratégique dans le bien-être peut réduire ce montant de 15 % à 25 % dès la première année.",
