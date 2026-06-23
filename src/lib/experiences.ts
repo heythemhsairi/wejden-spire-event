@@ -61,9 +61,9 @@ export const EXPERIENCES: ExperienceMeta[] = [
   {
     slug: "roi-calculator",
     number: 7,
-    title: "Calculateur de ROI",
-    tagline: "Combien rapporte l'investissement dans le bien-être ? Le retour, chiffré.",
+    title: "Calculateur d'économies potentielles",
+    tagline: "Combien votre organisation pourrait économiser — et comment ce calcul est établi.",
     href: "/experience/roi-calculator",
-    preview: "ROI 700 % · retour 1,5 mois",
+    preview: "Économies annuelles potentielles",
   },
 ];

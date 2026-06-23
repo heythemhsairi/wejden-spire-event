@@ -14,7 +14,7 @@ const EXPERIENCES = [
   { href: "/experience/advisor", label: "Conseiller IA des effectifs" },
   { href: "/experience/pulse", label: "Signal humain en direct" },
   { href: "/experience/mood-trends", label: "Tendances d'humeur" },
-  { href: "/experience/roi-calculator", label: "Calculateur de ROI" },
+  { href: "/experience/roi-calculator", label: "Calculateur d'économies" },
 ];
 
 export const WEJDENSPIRE_SITE = "https://wejdenspire.com/";

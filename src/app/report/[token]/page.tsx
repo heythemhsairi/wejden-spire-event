@@ -38,7 +38,7 @@ export default async function ReportPage({ params }: { params: Promise<{ token: 
           {row.experience === "cost" && "Rapport de coût caché"}
           {row.experience === "risk" && "Rapport de risque des effectifs"}
           {row.experience === "dashboard" && "Rapport tableau de bord"}
-          {row.experience === "roi" && "Rapport de ROI"}
+          {row.experience === "roi" && "Rapport d'économies potentielles"}
         </h1>
 
         <div className="mt-8">
@@ -159,20 +159,18 @@ function DashboardReport({ outputs, inputs }: { outputs: Record<string, unknown>
 
 function RoiReport({ outputs }: { outputs: Record<string, unknown> }) {
   const annualSavings = Number(outputs.annualSavings ?? 0);
-  const roiPct = Number(outputs.roiPct ?? 0);
-  const netGain = Number(outputs.netGain ?? 0);
-  const paybackMonths = Number(outputs.paybackMonths ?? 0);
   const threeYearValue = Number(outputs.threeYearValue ?? 0);
+  const perEmployeeSaving = Number(outputs.perEmployeeSaving ?? 0);
+  const savingsRate = Number(outputs.savingsRate ?? 0);
   const rows = [
-    ["Gain net", formatCurrencyFull(netGain)],
-    ["Retour sur investissement", `${Math.round(roiPct)}%`],
-    ["Délai de rentabilité", `${paybackMonths} mois`],
-    ["Valeur sur 3 ans", formatCurrencyFull(threeYearValue)],
+    ["Économies cumulées sur 3 ans", formatCurrencyFull(threeYearValue)],
+    ["Part du coût caché évitée", `${Math.round(savingsRate * 100)} %`],
+    ["Économie par employé / an", formatCurrencyFull(perEmployeeSaving)],
   ] as const;
   return (
     <div className="space-y-6">
       <div className="rounded-xl border border-ws-border bg-gradient-to-br from-ws-cloud to-white p-7">
-        <p className="text-xs uppercase tracking-wider text-ws-sage">Économies annuelles estimées</p>
+        <p className="text-xs uppercase tracking-wider text-ws-sage">Économies annuelles potentielles</p>
         <div className="tnum mt-2 font-display text-6xl font-bold text-ws-primary">{formatCurrencyCompact(annualSavings)}</div>
         <p className="tnum mt-2 text-sm text-ws-sage">{formatCurrencyFull(annualSavings)}</p>
       </div>

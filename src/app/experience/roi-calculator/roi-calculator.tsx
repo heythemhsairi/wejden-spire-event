@@ -2,7 +2,8 @@
 
 import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
-import { calculateRoi, defaultInvestment, type RoiInputs } from "@/lib/domain/roi-calculator";
+import { calculateRoi, type RoiInputs } from "@/lib/domain/roi-calculator";
+import { BENCHMARKS } from "@/lib/domain/benchmarks";
 import { INDUSTRIES, type Industry } from "@/lib/domain/types";
 import { CountUp } from "@/components/ws/count-up";
 import { Button, Badge, ConversionBridge } from "@/components/ws/ui";
@@ -18,42 +19,34 @@ export function RoiCalculator() {
     turnoverRate: 10,
     sickDays: 6,
     industry: "Manufacturing",
-    investment: defaultInvestment(500),
     turnoverReduction: 0.15,
     absenceReduction: 0.1,
     productivityRecovery: 0.08,
   });
-
   const [leadOpen, setLeadOpen] = useState(false);
 
   const full: RoiInputs = { employees, ...input };
   const result = useMemo(() => calculateRoi(full), [full]);
+  const replacementFactor = (BENCHMARKS[input.industry] ?? BENCHMARKS.Other).replacement_factor;
 
   const savingsParts = [
     { label: t("roi.fromTurnover"), value: result.turnoverSavings, color: "#4AAA83" },
     { label: t("roi.fromAbsence"), value: result.absenceSavings, color: "#7FAEDB" },
     { label: t("roi.fromProductivity"), value: result.productivitySavings, color: "#9A8BD6" },
   ];
-  const maxBar = Math.max(result.annualSavings, input.investment, 1);
-
-  function setEmp(v: number) {
-    setEmployees(v);
-    // keep investment in step with size unless user has overridden it heavily
-    setInput((s) => ({ ...s, investment: defaultInvestment(v) }));
-  }
 
   return (
     <div className="mx-auto max-w-7xl px-5 py-10">
       <div className="mb-6">
         <Badge color="primary">{t("roi.badge")}</Badge>
         <h1 className="mt-3 font-display text-3xl font-bold text-ws-ink">{t("roi.title")}</h1>
-        <p className="mt-1 text-ws-sage">{t("roi.sub")}</p>
+        <p className="mt-1 max-w-2xl text-ws-sage">{t("roi.sub")}</p>
       </div>
 
       <div className="grid gap-6 lg:grid-cols-[minmax(0,360px)_1fr]">
         {/* Inputs */}
         <div className="space-y-5 rounded-2xl border border-ws-border bg-white p-6">
-          <NumberInput label={t("roi.employees")} value={employees} min={1} max={50000} step={10} onChange={setEmp} />
+          <NumberInput label={t("roi.employees")} value={employees} min={1} max={50000} step={10} onChange={setEmployees} />
           <NumberInput label={t("roi.avgSalary")} value={input.avgSalary} min={6000} max={200000} step={500} onChange={(v) => setInput({ ...input, avgSalary: v })} fmt={(n) => formatCurrencyFull(n)} />
           <NumberInput label={t("roi.turnover")} value={input.turnoverRate} min={0} max={60} step={0.5} onChange={(v) => setInput({ ...input, turnoverRate: v })} />
           <NumberInput label={t("roi.sickDays")} value={input.sickDays} min={0} max={40} step={0.1} onChange={(v) => setInput({ ...input, sickDays: v })} />
@@ -63,9 +56,8 @@ export function RoiCalculator() {
               {INDUSTRIES.map((i) => <option key={i} value={i}>{i}</option>)}
             </select>
           </div>
-          <NumberInput label={t("roi.investment")} value={input.investment} min={1000} max={2000000} step={1000} onChange={(v) => setInput({ ...input, investment: v })} fmt={(n) => formatCurrencyFull(n)} />
 
-          {/* Assumptions */}
+          {/* Levers */}
           <div className="rounded-xl border border-ws-border bg-ws-cloud p-4">
             <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-ws-sage">{t("roi.assumptions")}</p>
             <PercentInput label={t("roi.turnoverRed")} value={input.turnoverReduction} onChange={(v) => setInput({ ...input, turnoverReduction: v })} />
@@ -76,37 +68,21 @@ export function RoiCalculator() {
 
         {/* Results */}
         <div className="space-y-5">
-          {/* Hero numbers */}
-          <div className="grid gap-4 sm:grid-cols-2">
-            <div className="rounded-2xl border border-ws-border bg-gradient-to-br from-ws-cloud to-white p-6">
-              <p className="text-xs font-semibold uppercase tracking-wider text-ws-sage">{t("roi.annualSavings")}</p>
-              <div className="tnum mt-2 font-display text-5xl font-bold text-ws-primary">
-                <CountUp value={result.annualSavings} format={formatCurrencyCompact} />
-              </div>
-              <p className="tnum mt-1 text-sm text-ws-sage">{formatCurrencyFull(result.annualSavings)}</p>
+          {/* Hero: annual savings */}
+          <div className="rounded-2xl border border-ws-border bg-gradient-to-br from-ws-cloud to-white p-7">
+            <p className="text-xs font-semibold uppercase tracking-wider text-ws-sage">{t("roi.annualSavings")}</p>
+            <div className="tnum mt-2 font-display text-6xl font-bold text-ws-primary sm:text-7xl">
+              <CountUp value={result.annualSavings} format={formatCurrencyCompact} />
             </div>
-            <div className="rounded-2xl border border-ws-border bg-white p-6">
-              <p className="text-xs font-semibold uppercase tracking-wider text-ws-sage">{t("roi.roiPct")}</p>
-              <div className="tnum mt-2 font-display text-5xl font-bold text-ws-purple-dark">
-                <CountUp value={Math.max(0, result.roiPct)} format={(n) => `${Math.round(n)} %`} />
-              </div>
-              <p className="tnum mt-1 text-sm text-ws-sage">{t("roi.netGain")}: {formatCurrencyFull(result.netGain)}</p>
-            </div>
+            <p className="tnum mt-2 text-sm text-ws-sage">
+              {formatCurrencyFull(result.annualSavings)} · {Math.round(result.savingsRate * 100)} % {t("roi.ofHidden")} · {formatCurrencyFull(result.perEmployeeSaving)} {t("roi.perEmployee")}
+            </p>
           </div>
 
-          {/* Payback + 3yr */}
-          <div className="grid gap-4 sm:grid-cols-2">
-            <Tile label={t("roi.payback")} value={isFinite(result.paybackMonths) ? `${result.paybackMonths.toFixed(1)} ${t("roi.paybackMonths")}` : "—"} />
-            <Tile label={t("roi.threeYear")} value={formatCurrencyCompact(result.threeYearValue)} />
-          </div>
-
-          {/* Savings vs investment bars */}
+          {/* 3-year */}
           <div className="rounded-2xl border border-ws-border bg-white p-6">
-            <h3 className="text-sm font-semibold text-ws-ink">{t("roi.savingsVsInvest")}</h3>
-            <div className="mt-4 space-y-3">
-              <Bar label={t("roi.savings")} value={result.annualSavings} max={maxBar} color="#4AAA83" />
-              <Bar label={t("roi.invest")} value={input.investment} max={maxBar} color="#9A8BD6" />
-            </div>
+            <p className="text-xs font-semibold uppercase tracking-wider text-ws-sage">{t("roi.threeYear")}</p>
+            <p className="tnum mt-2 font-display text-4xl font-bold text-ws-purple-dark">{formatCurrencyCompact(result.threeYearValue)}</p>
           </div>
 
           {/* Where savings come from */}
@@ -125,6 +101,18 @@ export function RoiCalculator() {
                 </div>
               ))}
             </div>
+          </div>
+
+          {/* HOW THIS IS CALCULATED — transparency (client request) */}
+          <div className="rounded-2xl border border-ws-primary/20 bg-ws-soft-green p-6">
+            <h3 className="font-display text-base font-bold text-ws-ink">{t("roi.howTitle")}</h3>
+            <p className="mt-2 text-sm text-ws-sage">{t("roi.howIntro")}</p>
+            <ol className="mt-4 space-y-3">
+              <HowStep n={1} color="#4AAA83" text={t("roi.howTurnover", { factor: replacementFactor.toFixed(1).replace(".", ",") })} />
+              <HowStep n={2} color="#7FAEDB" text={t("roi.howAbsence")} />
+              <HowStep n={3} color="#9A8BD6" text={t("roi.howProductivity")} />
+            </ol>
+            <p className="mt-4 border-t border-ws-primary/15 pt-3 text-xs leading-relaxed text-ws-sage">{t("roi.howClosing")}</p>
           </div>
 
           <ConversionBridge text={t("roi.bridge")} />
@@ -154,26 +142,12 @@ export function RoiCalculator() {
   );
 }
 
-function Tile({ label, value }: { label: string; value: string }) {
+function HowStep({ n, color, text }: { n: number; color: string; text: string }) {
   return (
-    <div className="rounded-2xl border border-ws-border bg-white p-6">
-      <p className="text-xs font-semibold uppercase tracking-wider text-ws-sage">{label}</p>
-      <p className="tnum mt-2 font-display text-3xl font-bold text-ws-ink">{value}</p>
-    </div>
-  );
-}
-
-function Bar({ label, value, max, color }: { label: string; value: number; max: number; color: string }) {
-  return (
-    <div>
-      <div className="flex justify-between text-sm">
-        <span className="text-ws-sage">{label}</span>
-        <span className="tnum font-semibold text-ws-ink">{formatCurrencyCompact(value)}</span>
-      </div>
-      <div className="mt-1 h-3 overflow-hidden rounded-full bg-ws-cloud">
-        <div className="h-full rounded-full" style={{ width: `${(value / max) * 100}%`, backgroundColor: color, transition: "width 0.6s" }} />
-      </div>
-    </div>
+    <li className="flex gap-3">
+      <span className="tnum flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-xs font-bold text-white" style={{ backgroundColor: color }}>{n}</span>
+      <span className="text-sm text-ws-ink">{text}</span>
+    </li>
   );
 }
 
