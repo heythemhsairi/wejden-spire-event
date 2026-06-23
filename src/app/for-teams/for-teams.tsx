@@ -6,6 +6,8 @@ import { requestTeamCode } from "@/app/actions/employee";
 import { ROLES } from "@/lib/domain/types";
 import { Button, Badge } from "@/components/ws/ui";
 import { IconMood, IconWellbeing, IconTalk, IconCheck } from "@/components/ws/icons";
+import { TrendChart } from "@/components/ws/trend-chart";
+import { generateMoodTrend } from "@/lib/domain/mood-trends";
 
 export function ForTeams() {
   const [form, setForm] = useState({ fullName: "", email: "", company: "", role: "" });
@@ -145,6 +147,16 @@ function Result({ code, company, onAgain }: { code: string; company: string; onA
           <label className="mb-1 block text-xs font-semibold uppercase tracking-wider text-ws-text-lo">Ready-to-send message</label>
           <textarea readOnly value={shareMsg} rows={4} className="w-full rounded-xl border border-ws-border bg-ws-cloud px-3 py-2.5 text-sm text-ws-ink" />
           <button onClick={() => copy(shareMsg, "msg")} className="mt-2 text-sm font-medium text-ws-primary hover:underline">{copied === "msg" ? "Copied!" : "Copy message"}</button>
+        </div>
+
+        {/* What you'll see — mood trends preview */}
+        <div className="mt-7 rounded-2xl border border-ws-border bg-ws-cloud p-5">
+          <p className="text-xs font-semibold uppercase tracking-wider text-ws-text-lo">What you&apos;ll see as a leader</p>
+          <p className="mt-1 text-sm text-ws-sage">Anonymous mood &amp; affect trends across your team — strain rising before it becomes attrition.</p>
+          <div className="mt-3 rounded-xl border border-ws-border bg-white p-3">
+            <TrendChart points={generateMoodTrend("Technology", "200–500").points} interventionThreshold={45} height={200} />
+          </div>
+          <Button href="/experience/mood-trends" variant="ghost" className="mt-3 px-4 py-2 text-sm">See the full mood-trends view →</Button>
         </div>
 
         <div className="mt-7 flex flex-wrap gap-3">

@@ -50,4 +50,12 @@ export const EXPERIENCES: ExperienceMeta[] = [
     href: "/experience/pulse",
     preview: "247 live participants",
   },
+  {
+    slug: "mood-trends",
+    number: 6,
+    title: "Mood Trends",
+    tagline: "10 weeks of workforce affect — the early warning before attrition.",
+    href: "/experience/mood-trends",
+    preview: "Negative affect ▲ rising",
+  },
 ];
