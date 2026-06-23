@@ -39,15 +39,15 @@ export function WellbeingTest({ codeId }: { codeId: string }) {
           <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-full bg-ws-soft-purple text-ws-purple-dark">
             <IconHeartPulse size={32} />
           </div>
-          <h2 className="font-display text-2xl font-bold text-ws-ink">Weekly Wellbeing Check</h2>
+          <h2 className="font-display text-2xl font-bold text-ws-ink">Bilan bien-être hebdomadaire</h2>
           <p className="mt-3 text-sm leading-relaxed text-ws-sage">
-            A short questionnaire about the emotions you may have felt recently. For each one, indicate how
-            much you&apos;ve felt it over the past week.
+            Un court questionnaire sur les émotions que vous avez pu ressentir récemment. Pour chacune,
+            indiquez à quel point vous l&apos;avez ressentie au cours de la semaine passée.
           </p>
           <button onClick={() => setPhase("questions")} className="mt-6 w-full rounded-full bg-ws-primary px-5 py-3 text-sm font-semibold text-white transition hover:bg-ws-primary-dark">
-            Start
+            Commencer
           </button>
-          <p className="mt-3 text-xs text-ws-text-dim">About 2 minutes · {total} questions</p>
+          <p className="mt-3 text-xs text-ws-text-dim">Environ 2 minutes · {total} questions</p>
         </div>
       </div>
     );
@@ -67,11 +67,11 @@ export function WellbeingTest({ codeId }: { codeId: string }) {
           <div className="h-full rounded-full bg-ws-purple transition-all" style={{ width: `${pct + 100 / total}%` }} />
         </div>
 
-        <p className="text-center text-sm font-medium text-ws-sage">How much have you felt this week?</p>
+        <p className="text-center text-sm font-medium text-ws-sage">À quel point l&apos;avez-vous ressenti cette semaine ?</p>
 
         <div className="mt-6 flex flex-col items-center">
           <span className={`rounded-full px-3 py-1 text-[11px] font-semibold uppercase tracking-wider ${isPositive ? "bg-ws-soft-green text-ws-primary-dark" : "bg-ws-soft-purple text-ws-purple-dark"}`}>
-            {isPositive ? "Positive affect" : "Negative affect"}
+            {isPositive ? "Affect positif" : "Affect négatif"}
           </span>
           <div className="mt-5 flex items-center gap-3">
             <EmotionIcon name={emotion.icon} size={36} className={isPositive ? "text-ws-primary" : "text-ws-purple-dark"} />
@@ -98,7 +98,7 @@ export function WellbeingTest({ codeId }: { codeId: string }) {
 
         {step > 0 && (
           <button onClick={() => setStep((s) => s - 1)} className="mt-8 flex items-center gap-1.5 text-sm text-ws-sage hover:text-ws-ink">
-            ← Back
+            ← Retour
           </button>
         )}
       </div>
@@ -108,7 +108,7 @@ export function WellbeingTest({ codeId }: { codeId: string }) {
   // ── Result ──
   return (
     <div className="text-center">
-      <h2 className="font-display text-2xl font-bold text-ws-ink">Your wellbeing snapshot</h2>
+      <h2 className="font-display text-2xl font-bold text-ws-ink">Votre instantané de bien-être</h2>
       <div className="mt-6 flex justify-center">
         <RadialGauge value={result!.score} label="/ 100" sublabel={result!.band} invertColor size={180} />
       </div>
@@ -117,17 +117,17 @@ export function WellbeingTest({ codeId }: { codeId: string }) {
       {/* Positive vs negative affect */}
       <div className="mt-7 grid grid-cols-2 gap-3">
         <div className="rounded-2xl border border-ws-border bg-white p-5">
-          <p className="text-xs font-semibold uppercase tracking-wider text-ws-primary-dark">Positive affect</p>
+          <p className="text-xs font-semibold uppercase tracking-wider text-ws-primary-dark">Affect positif</p>
           <p className="tnum mt-1 font-display text-3xl font-bold text-ws-primary">{result!.positiveScore}</p>
         </div>
         <div className="rounded-2xl border border-ws-border bg-white p-5">
-          <p className="text-xs font-semibold uppercase tracking-wider text-ws-purple-dark">Negative affect</p>
+          <p className="text-xs font-semibold uppercase tracking-wider text-ws-purple-dark">Affect négatif</p>
           <p className="tnum mt-1 font-display text-3xl font-bold text-ws-purple-dark">{result!.negativeScore}</p>
         </div>
       </div>
 
       <div className="mt-5 rounded-2xl border border-ws-border bg-white p-6 text-left">
-        <h3 className="font-display text-base font-bold text-ws-ink">A few things that might help</h3>
+        <h3 className="font-display text-base font-bold text-ws-ink">Quelques pistes qui pourraient aider</h3>
         <ul className="mt-3 space-y-2.5">
           {result!.tips.map((t, i) => (
             <li key={i} className="flex gap-2.5 text-sm text-ws-sage">
@@ -139,13 +139,13 @@ export function WellbeingTest({ codeId }: { codeId: string }) {
       </div>
 
       <div className="mt-5 rounded-xl border border-ws-purple/25 bg-ws-soft-purple px-5 py-4 text-sm text-ws-ink">
-        Want to talk any of this through? The wellbeing assistant is here for you.
+        Envie d&apos;en parler ? L&apos;assistant bien-être est là pour vous.
       </div>
 
       <button onClick={() => { setPhase("intro"); setStep(0); setAnswers({}); setSaved(false); }} className="mt-5 rounded-full border border-ws-border bg-white px-4 py-2 text-sm text-ws-ink hover:bg-ws-cloud">
-        Retake
+        Recommencer
       </button>
-      <p className="mt-4 text-xs text-ws-text-dim">Private &amp; anonymous · illustrative, not a clinical assessment.</p>
+      <p className="mt-4 text-xs text-ws-text-dim">Privé &amp; anonyme · illustratif, pas une évaluation clinique.</p>
     </div>
   );
 }

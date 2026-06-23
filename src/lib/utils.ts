@@ -5,19 +5,32 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-/** Format a number as EUR with no decimals, e.g. 1840000 -> "€1.84M". */
+// Tunisian Dinar, French (Tunisia) number formatting: 1 840 000 DT.
+const NBSP = " "; // narrow no-break space used as the FR thousands separator
+
+function frGroup(n: number): string {
+  return Math.round(n).toLocaleString("fr-FR").replace(/ |\s/g, NBSP);
+}
+
+/** Compact TND, e.g. 1840000 -> "1,84 M DT". */
 export function formatCurrencyCompact(value: number): string {
   if (!isFinite(value)) return "—";
   const abs = Math.abs(value);
-  if (abs >= 1_000_000) return `€${(value / 1_000_000).toFixed(2)}M`;
-  if (abs >= 1_000) return `€${(value / 1_000).toFixed(0)}k`;
-  return `€${Math.round(value).toLocaleString("en-US")}`;
+  if (abs >= 1_000_000) return `${(value / 1_000_000).toFixed(2).replace(".", ",")} M DT`;
+  if (abs >= 10_000) return `${(value / 1_000).toFixed(0)} k DT`;
+  return `${frGroup(value)} DT`;
 }
 
-/** Full EUR with thousands separators, e.g. "€1,840,000". */
+/** Full TND with FR grouping, e.g. "1 840 000 DT". */
 export function formatCurrencyFull(value: number): string {
   if (!isFinite(value)) return "—";
-  return `€${Math.round(value).toLocaleString("en-US")}`;
+  return `${frGroup(value)} DT`;
+}
+
+/** Plain FR-grouped number (no currency). */
+export function formatNumberFr(value: number): string {
+  if (!isFinite(value)) return "—";
+  return frGroup(value);
 }
 
 export function clamp(n: number, min: number, max: number): number {

@@ -12,15 +12,29 @@ export interface CostInputs {
   industry: Industry;
 }
 
+export type TurnoverBand = "Sain" | "Acceptable" | "Préoccupant" | "Critique";
+
 export interface CostResult {
   turnoverCost: number;
   absenteeismCost: number;
   productivityLoss: number;
   hiddenAnnualCost: number;
-  burnoutExposure: "Low" | "Moderate" | "High" | "Severe";
+  burnoutExposure: "Faible" | "Modérée" | "Élevée" | "Sévère";
   burnoutScore: number; // 0–100
   benchmarkMultiple: number; // hidden cost as multiple of industry median
   costPerEmployee: number;
+  turnoverBand: TurnoverBand;
+  turnoverVsMedian: number; // ratio of user's turnover to the industry median
+  // "What if" quick win: reduce 1 sick day/employee + 1 point of turnover.
+  quickWinSavings: number;
+}
+
+/** Categorize a turnover rate against the industry median: is 10% good or bad? */
+export function categorizeTurnover(turnoverRate: number, median: number): { band: TurnoverBand; ratio: number } {
+  const ratio = median > 0 ? turnoverRate / median : 1;
+  const band: TurnoverBand =
+    ratio <= 0.8 ? "Sain" : ratio <= 1.15 ? "Acceptable" : ratio <= 1.6 ? "Préoccupant" : "Critique";
+  return { band, ratio };
 }
 
 /**
@@ -52,7 +66,7 @@ export function calculateHiddenCost(input: CostInputs): CostResult {
   const burnoutScore = Math.round(Math.min(100, Math.max(0, raw)));
 
   const burnoutExposure =
-    burnoutScore >= 75 ? "Severe" : burnoutScore >= 55 ? "High" : burnoutScore >= 40 ? "Moderate" : "Low";
+    burnoutScore >= 75 ? "Sévère" : burnoutScore >= 55 ? "Élevée" : burnoutScore >= 40 ? "Modérée" : "Faible";
 
   const payroll = Math.max(1, employees * avgSalary);
   const ratio = hiddenAnnualCost / payroll;
@@ -61,6 +75,13 @@ export function calculateHiddenCost(input: CostInputs): CostResult {
     (b.sickdays_median / WORKING_DAYS) * COVERAGE_MULT +
     b.presenteeism_rate;
   const benchmarkMultiple = medianRatio > 0 ? ratio / medianRatio : 1;
+
+  const { band: turnoverBand, ratio: turnoverVsMedian } = categorizeTurnover(turnoverRate, b.turnover_median);
+
+  // Quick win: what reducing 1 sick day/employee + 1 point of turnover saves.
+  const oneTurnoverPoint = employees * 0.01 * avgSalary * b.replacement_factor;
+  const oneSickDay = employees * 1 * dailySalary * COVERAGE_MULT;
+  const quickWinSavings = oneTurnoverPoint + oneSickDay;
 
   return {
     turnoverCost,
@@ -71,5 +92,8 @@ export function calculateHiddenCost(input: CostInputs): CostResult {
     burnoutScore,
     benchmarkMultiple,
     costPerEmployee: employees > 0 ? hiddenAnnualCost / employees : 0,
+    turnoverBand,
+    turnoverVsMedian,
+    quickWinSavings,
   };
 }

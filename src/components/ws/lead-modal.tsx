@@ -26,7 +26,7 @@ interface LeadModalProps {
 export function LeadModal({
   open,
   onClose,
-  title = "Send me my executive report",
+  title = "Recevoir mon rapport exécutif",
   sourceExperience,
   experiencesCompleted,
   hiddenCost,
@@ -66,19 +66,19 @@ export function LeadModal({
       <div className="absolute inset-0 bg-ws-ink/40 backdrop-blur-sm" onClick={onClose} />
       <div className="relative w-full max-w-md animate-ws-rise rounded-2xl border border-ws-border bg-white p-6 shadow-ws-lift">
         <h2 className="font-display text-xl font-bold text-ws-ink">{title}</h2>
-        <p className="mt-1 text-sm text-ws-sage">No password. Delivered instantly.</p>
+        <p className="mt-1 text-sm text-ws-sage">Sans mot de passe. Livré instantanément.</p>
         <form onSubmit={handleSubmit} className="mt-5 space-y-3">
-          <Field label="Full name" value={form.fullName} onChange={(v) => setForm({ ...form, fullName: v })} required />
-          <Field label="Work email" type="email" value={form.email} onChange={(v) => setForm({ ...form, email: v })} required />
-          <Field label="Company" value={form.company} onChange={(v) => setForm({ ...form, company: v })} />
+          <Field label="Nom complet" value={form.fullName} onChange={(v) => setForm({ ...form, fullName: v })} required />
+          <Field label="E-mail professionnel" type="email" value={form.email} onChange={(v) => setForm({ ...form, email: v })} required />
+          <Field label="Entreprise" value={form.company} onChange={(v) => setForm({ ...form, company: v })} />
           <div>
-            <label className="mb-1 block text-xs font-semibold uppercase tracking-wider text-ws-text-lo">Role</label>
+            <label className="mb-1 block text-xs font-semibold uppercase tracking-wider text-ws-text-lo">Fonction</label>
             <select
               value={form.role}
               onChange={(e) => setForm({ ...form, role: e.target.value })}
               className="w-full rounded-xl border border-ws-border bg-ws-cloud px-3 py-2.5 text-sm text-ws-ink outline-none focus:border-ws-primary"
             >
-              <option value="">Select…</option>
+              <option value="">Sélectionner…</option>
               {ROLES.map((r) => (
                 <option key={r} value={r}>{r}</option>
               ))}
@@ -86,11 +86,11 @@ export function LeadModal({
           </div>
           <label className="flex items-start gap-2 text-xs text-ws-sage">
             <input type="checkbox" checked={consent} onChange={(e) => setConsent(e.target.checked)} className="mt-0.5 accent-ws-primary" />
-            <span>I agree to be contacted by WejdenSpire about workforce intelligence. (GDPR consent)</span>
+            <span>J&apos;accepte d&apos;être contacté(e) par WejdenSpire au sujet de l&apos;intelligence des effectifs. (Consentement RGPD)</span>
           </label>
           {error && <p className="text-xs text-ws-red">{error}</p>}
           <Button type="submit" variant="primary" className="w-full" disabled={busy}>
-            {busy ? "Sending…" : "Send my report →"}
+            {busy ? "Envoi…" : "Envoyer mon rapport →"}
           </Button>
         </form>
       </div>

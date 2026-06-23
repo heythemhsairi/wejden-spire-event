@@ -78,8 +78,8 @@ export function LiveWall({ sessionId }: { sessionId: string | null }) {
         <div className="flex items-center gap-3">
           <BrandMark size={40} />
           <div>
-            <div className="font-display text-xl font-extrabold tracking-tight text-ws-ink">EVENT WORKFORCE PULSE</div>
-            <div className="text-xs font-medium uppercase tracking-wider text-ws-text-dim">Live signal · WejdenSpire</div>
+            <div className="font-display text-xl font-extrabold tracking-tight text-ws-ink">POULS DES EFFECTIFS EN DIRECT</div>
+            <div className="text-xs font-medium uppercase tracking-wider text-ws-text-dim">Signal en direct · WejdenSpire</div>
           </div>
         </div>
         <div className="flex items-center gap-6">
@@ -95,30 +95,30 @@ export function LiveWall({ sessionId }: { sessionId: string | null }) {
       </div>
 
       {!sessionId && (
-        <div className="mt-20 text-center text-ws-sage">No active session. Start one from the admin console.</div>
+        <div className="mt-20 text-center text-ws-sage">Aucune session active. Démarrez-en une depuis la console admin.</div>
       )}
 
       {/* Big indices */}
       <div className={`mt-8 grid flex-1 grid-cols-1 gap-5 lg:grid-cols-3 ${flash ? "transition-all" : ""}`}>
-        <BigStat label="Stress Index" value={stress} higherIsWorse hasData={hasData} />
-        <BigStat label="Energy Index" value={energy} hasData={hasData} />
-        <BigStat label="Psychological Safety" value={safety} hasData={hasData} />
+        <BigStat label="Indice de stress" value={stress} higherIsWorse hasData={hasData} />
+        <BigStat label="Indice d'énergie" value={energy} hasData={hasData} />
+        <BigStat label="Sécurité psychologique" value={safety} hasData={hasData} />
       </div>
 
       {/* Burnout gauge + secondary */}
       <div className="mt-5 grid grid-cols-1 gap-5 lg:grid-cols-[1fr_auto_1fr] lg:items-center">
-        <SecondaryStat label="Workload pressure" value={stats.workload_avg} higherIsWorse />
+        <SecondaryStat label="Pression de charge" value={stats.workload_avg} higherIsWorse />
         <div className="flex flex-col items-center rounded-xl border border-ws-border bg-white px-10 py-6">
-          <span className="mb-2 text-xs uppercase tracking-wider text-ws-text-dim">Burnout exposure</span>
-          <RadialGauge value={hasData ? burnout : 0} size={200} label="exposure" />
+          <span className="mb-2 text-xs uppercase tracking-wider text-ws-text-dim">Exposition à l'épuisement</span>
+          <RadialGauge value={hasData ? burnout : 0} size={200} label="exposition" />
         </div>
-        <SecondaryStat label="Support" value={stats.support_avg} />
+        <SecondaryStat label="Soutien" value={stats.support_avg} />
       </div>
 
       {/* Closer */}
       <div className="mt-8 rounded-xl border border-ws-purple/25 bg-ws-soft-purple px-6 py-5 text-center">
         <p className="font-display text-2xl font-semibold text-ws-ink">
-          Imagine having this visibility inside your organization — <span className="text-ws-primary">every day.</span>
+          Imaginez avoir cette visibilité dans votre organisation — <span className="text-ws-primary">chaque jour.</span>
         </p>
         <a href="https://wejdenspire.com/" target="_blank" rel="noopener noreferrer" className="mt-2 inline-block text-sm font-semibold text-ws-primary hover:text-ws-primary-dark">
           wejdenspire.com ↗

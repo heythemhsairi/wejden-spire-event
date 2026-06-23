@@ -5,12 +5,12 @@ import "./globals.css";
 const manrope = Manrope({ subsets: ["latin"], variable: "--font-manrope", display: "swap", weight: ["300", "400", "500", "600", "700", "800"] });
 
 export const metadata: Metadata = {
-  title: "WejdenSpire — Workforce Wellbeing Intelligence",
+  title: "WejdenSpire — Intelligence du bien-être au travail",
   description:
-    "Transform invisible psychosocial and emotional workforce signals into measurable business intelligence. Measure → Analyze → Act.",
+    "Transformez les signaux psychosociaux et émotionnels invisibles de vos effectifs en intelligence d'affaires mesurable. Mesurer → Analyser → Agir.",
   openGraph: {
-    title: "WejdenSpire — Workforce Wellbeing Intelligence",
-    description: "The signals your workforce is already sending. You're just not measuring them — yet.",
+    title: "WejdenSpire — Intelligence du bien-être au travail",
+    description: "Les signaux que votre personnel envoie déjà. Vous ne les mesurez juste pas — encore.",
     type: "website",
   },
 };
@@ -23,7 +23,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={manrope.variable}>
+    <html lang="fr" className={manrope.variable}>
       <body className="min-h-screen bg-white font-sans text-ws-ink antialiased">{children}</body>
     </html>
   );

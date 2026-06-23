@@ -7,6 +7,7 @@ import { RadialGauge } from "@/components/ws/radial-gauge";
 import { RiskBar } from "@/components/ws/risk-bar";
 import { Button, Badge, ConversionBridge } from "@/components/ws/ui";
 import { LeadModal } from "@/components/ws/lead-modal";
+import { t } from "@/lib/i18n";
 
 export function RiskScanner() {
   const router = useRouter();
@@ -30,8 +31,8 @@ export function RiskScanner() {
     return (
       <div className="mx-auto max-w-2xl px-5 py-12">
         <div className="mb-6 flex items-center justify-between">
-          <Badge color="primary">Experience 02</Badge>
-          <span className="tnum text-sm text-ws-sage">Question {step + 1} / {total}</span>
+          <Badge color="primary">{t("risk.badge")}</Badge>
+          <span className="tnum text-sm text-ws-sage">{t("risk.questionOf", { n: step + 1, total })}</span>
         </div>
         <div className="mb-8 h-1.5 overflow-hidden rounded-full bg-ws-cloud">
           <div className="h-full rounded-full bg-ws-primary transition-all" style={{ width: `${(step / total) * 100}%` }} />
@@ -52,14 +53,14 @@ export function RiskScanner() {
               }`}
             >
               <span>{opt}</span>
-              <span className="text-ws-text-dim">{i === 0 ? "Lowest maturity" : i === 4 ? "Highest" : ""}</span>
+              <span className="text-ws-text-dim">{i === 0 ? t("risk.lowest") : i === 4 ? t("risk.highest") : ""}</span>
             </button>
           ))}
         </div>
 
         <div className="mt-6">
           {step > 0 && (
-            <Button variant="ghost" onClick={() => setStep((s) => s - 1)}>← Back</Button>
+            <Button variant="ghost" onClick={() => setStep((s) => s - 1)}>← {t("common.back")}</Button>
           )}
         </div>
       </div>
@@ -69,14 +70,14 @@ export function RiskScanner() {
   // Result
   return (
     <div className="mx-auto max-w-4xl px-5 py-12">
-      <Badge color="primary">Experience 02 · Result</Badge>
-      <h1 className="mt-3 font-display text-3xl font-bold text-ws-ink">Workforce Risk Score</h1>
+      <Badge color="primary">{t("risk.resultBadge")}</Badge>
+      <h1 className="mt-3 font-display text-3xl font-bold text-ws-ink">{t("risk.title")}</h1>
 
       <div className="mt-8 grid gap-8 md:grid-cols-[auto_1fr] md:items-center">
         <div className="flex flex-col items-center">
           <RadialGauge value={result!.overall} label="/ 100" sublabel={result!.band} invertColor />
           <p className="mt-3 max-w-[200px] text-center text-xs text-ws-sage">
-            Higher = more mature workforce intelligence
+            {t("risk.higherBetter")}
           </p>
         </div>
         <div className="space-y-3.5">
@@ -87,7 +88,7 @@ export function RiskScanner() {
       </div>
 
       <div className="mt-8 rounded-xl border border-ws-border bg-white p-6">
-        <h3 className="font-display text-lg font-semibold text-ws-ink">Priority recommendations</h3>
+        <h3 className="font-display text-lg font-semibold text-ws-ink">{t("risk.recommendations")}</h3>
         <ul className="mt-3 space-y-2.5">
           {result!.recommendations.map((r, i) => (
             <li key={i} className="flex gap-3 text-sm text-ws-sage">
@@ -98,12 +99,12 @@ export function RiskScanner() {
         </ul>
       </div>
 
-      <ConversionBridge className="mt-6" text="This is a self-assessment. Imagine these scores measured from real, continuous signals — not a questionnaire." />
+      <ConversionBridge className="mt-6" text={t("risk.bridge")} />
 
       <div className="mt-6 flex flex-wrap gap-3">
-        <Button variant="primary" onClick={() => setLeadOpen(true)}>Download executive report →</Button>
-        <Button variant="ghost" onClick={() => { setStep(0); setAnswers({}); }}>Retake</Button>
-        <Button variant="ghost" onClick={() => router.push("/experience/dashboard")}>See the dashboard</Button>
+        <Button variant="primary" onClick={() => setLeadOpen(true)}>{t("risk.download")}</Button>
+        <Button variant="ghost" onClick={() => { setStep(0); setAnswers({}); }}>{t("common.retake")}</Button>
+        <Button variant="ghost" onClick={() => router.push("/experience/dashboard")}>{t("risk.seeDashboard")}</Button>
       </div>
 
       <LeadModal

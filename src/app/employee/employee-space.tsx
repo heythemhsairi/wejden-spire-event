@@ -9,6 +9,7 @@ import { IconMood, IconWellbeing, IconTalk, IconWave, IconArrowRight } from "@/c
 import { MoodChecker } from "./mood-checker";
 import { WellbeingTest } from "./wellbeing-test";
 import { EmployeeAssistant } from "./employee-assistant";
+import { t } from "@/lib/i18n";
 
 type Tool = "home" | "mood" | "score" | "assistant";
 
@@ -37,7 +38,7 @@ export function EmployeeSpace() {
       setCodeId(res.codeId);
       setLabel(res.label);
     } else {
-      setError("That code isn't valid or has been turned off. Check with your organizer.");
+      setError(t("employee.codeInvalid"));
     }
   }
 
@@ -47,8 +48,8 @@ export function EmployeeSpace() {
       <div className="flex min-h-screen items-center justify-center bg-ws-hero px-5">
         <div className="w-full max-w-sm text-center">
           <div className="mx-auto mb-5 flex justify-center"><BrandMark size={48} /></div>
-          <h1 className="font-display text-2xl font-bold text-ws-ink">Your wellbeing space</h1>
-          <p className="mt-2 text-sm text-ws-sage">Enter the access code you were given to open your private space.</p>
+          <h1 className="font-display text-2xl font-bold text-ws-ink">{t("employee.spaceTitle")}</h1>
+          <p className="mt-2 text-sm text-ws-sage">{t("employee.enterCode")}</p>
           <form
             onSubmit={(e) => { e.preventDefault(); tryCode(input); }}
             className="mt-6 rounded-2xl border border-ws-border bg-white p-6 shadow-ws-card"
@@ -63,10 +64,10 @@ export function EmployeeSpace() {
             />
             {error && <p className="mt-3 text-xs text-ws-red">{error}</p>}
             <button type="submit" disabled={checking || !input.trim()} className="mt-4 w-full rounded-full bg-ws-primary px-5 py-3 text-sm font-semibold text-white transition hover:bg-ws-primary-dark disabled:opacity-50">
-              {checking ? "Checking…" : "Enter →"}
+              {checking ? t("employee.checking") : t("employee.enter")}
             </button>
           </form>
-          <p className="mt-4 text-xs text-ws-text-dim">Private &amp; anonymous. We don&apos;t store your name.</p>
+          <p className="mt-4 text-xs text-ws-text-dim">{t("employee.private")}</p>
         </div>
       </div>
     );
@@ -92,18 +93,18 @@ export function EmployeeSpace() {
       <EmployeeHeader label={label} />
       <div className="mx-auto max-w-3xl px-5 py-10">
         <h1 className="flex items-center gap-2.5 font-display text-3xl font-bold text-ws-ink">
-          Hi there <IconWave size={28} className="text-ws-primary" />
+          {t("employee.hi")} <IconWave size={28} className="text-ws-primary" />
         </h1>
-        <p className="mt-2 text-ws-sage">This space is just for you. Private, anonymous, no pressure. What would you like to do?</p>
+        <p className="mt-2 text-ws-sage">{t("employee.hubSub")}</p>
 
         <div className="mt-8 grid gap-4 sm:grid-cols-3">
-          <ToolCard icon={<IconMood size={24} />} iconColor="text-ws-blue-dark" title="Mood check-in" desc="Log how you're feeling today in 20 seconds." onClick={() => setTool("mood")} bg="bg-ws-soft-blue" />
-          <ToolCard icon={<IconWellbeing size={24} />} iconColor="text-ws-primary" title="Wellbeing score" desc="A short check to understand how you're really doing." onClick={() => setTool("score")} bg="bg-ws-soft-green" />
-          <ToolCard icon={<IconTalk size={24} />} iconColor="text-ws-purple-dark" title="Talk it through" desc="A warm assistant here to listen and support you." onClick={() => setTool("assistant")} bg="bg-ws-soft-purple" />
+          <ToolCard icon={<IconMood size={24} />} iconColor="text-ws-blue-dark" title={t("employee.moodTitle")} desc={t("employee.moodDesc")} onClick={() => setTool("mood")} bg="bg-ws-soft-blue" />
+          <ToolCard icon={<IconWellbeing size={24} />} iconColor="text-ws-primary" title={t("employee.scoreTitle")} desc={t("employee.scoreDesc")} onClick={() => setTool("score")} bg="bg-ws-soft-green" />
+          <ToolCard icon={<IconTalk size={24} />} iconColor="text-ws-purple-dark" title={t("employee.talkTitle")} desc={t("employee.talkDesc")} onClick={() => setTool("assistant")} bg="bg-ws-soft-purple" />
         </div>
 
         <div className="mt-8 rounded-2xl border border-ws-border bg-white p-5 text-sm text-ws-sage">
-          Everything here is illustrative support for the event — not a medical service. If you&apos;re going through something serious, please reach out to someone you trust or a professional.
+          {t("employee.disclaimer")}
         </div>
       </div>
     </div>
@@ -117,14 +118,14 @@ function EmployeeHeader({ label, onHome }: { label: string | null; onHome?: () =
         <div className="flex items-center gap-2.5">
           <BrandMark size={28} />
           <div className="leading-none">
-            <div className="font-display text-sm font-extrabold text-ws-ink">Your Wellbeing Space</div>
+            <div className="font-display text-sm font-extrabold text-ws-ink">{t("employee.spaceTitle")}</div>
             {label && <div className="text-[10px] uppercase tracking-wider text-ws-text-dim">{label}</div>}
           </div>
         </div>
         {onHome ? (
-          <button onClick={onHome} className="rounded-full border border-ws-border bg-white px-4 py-2 text-sm font-medium text-ws-ink hover:bg-ws-cloud">← Back</button>
+          <button onClick={onHome} className="rounded-full border border-ws-border bg-white px-4 py-2 text-sm font-medium text-ws-ink hover:bg-ws-cloud">← {t("common.back")}</button>
         ) : (
-          <Link href="/" className="text-sm text-ws-sage hover:text-ws-ink">Exit</Link>
+          <Link href="/" className="text-sm text-ws-sage hover:text-ws-ink">{t("common.exit")}</Link>
         )}
       </div>
     </header>

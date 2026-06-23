@@ -5,14 +5,16 @@ import Link from "next/link";
 import { Button } from "./ui";
 import { BrandLogo, BrandMark } from "./brand-logo";
 import { FullscreenButton } from "./fullscreen-button";
+import { t } from "@/lib/i18n";
 
 const EXPERIENCES = [
-  { href: "/experience/cost-calculator", label: "Hidden Cost Calculator" },
-  { href: "/experience/risk-scanner", label: "Workforce Risk Scanner" },
-  { href: "/experience/dashboard", label: "Future Dashboard" },
-  { href: "/experience/advisor", label: "AI Workforce Advisor" },
-  { href: "/experience/pulse", label: "Live Human Signal" },
-  { href: "/experience/mood-trends", label: "Mood Trends" },
+  { href: "/experience/cost-calculator", label: "Calculateur de coût caché" },
+  { href: "/experience/risk-scanner", label: "Scanner de risque des effectifs" },
+  { href: "/experience/dashboard", label: "Tableau de bord du futur" },
+  { href: "/experience/advisor", label: "Conseiller IA des effectifs" },
+  { href: "/experience/pulse", label: "Signal humain en direct" },
+  { href: "/experience/mood-trends", label: "Tendances d'humeur" },
+  { href: "/experience/roi-calculator", label: "Calculateur de ROI" },
 ];
 
 export const WEJDENSPIRE_SITE = "https://wejdenspire.com/";
@@ -31,7 +33,7 @@ export function SiteNav() {
         <nav className="hidden items-center gap-1 md:flex">
           <div className="group relative">
             <button className="flex items-center gap-1 rounded-full px-3.5 py-2 text-sm font-medium text-ws-sage transition-colors hover:bg-ws-cloud hover:text-ws-ink">
-              Experiences
+              {t("common.experiences")}
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="transition-transform group-hover:rotate-180" aria-hidden>
                 <path d="m6 9 6 6 6-6" />
               </svg>
@@ -47,8 +49,8 @@ export function SiteNav() {
               </div>
             </div>
           </div>
-          <Link href="/for-teams" className="rounded-full px-3.5 py-2 text-sm font-medium text-ws-sage transition-colors hover:bg-ws-cloud hover:text-ws-ink">For teams</Link>
-          <Link href="/about" className="rounded-full px-3.5 py-2 text-sm font-medium text-ws-sage transition-colors hover:bg-ws-cloud hover:text-ws-ink">About</Link>
+          <Link href="/for-teams" className="rounded-full px-3.5 py-2 text-sm font-medium text-ws-sage transition-colors hover:bg-ws-cloud hover:text-ws-ink">{t("common.forTeams")}</Link>
+          <Link href="/about" className="rounded-full px-3.5 py-2 text-sm font-medium text-ws-sage transition-colors hover:bg-ws-cloud hover:text-ws-ink">{t("common.about")}</Link>
         </nav>
 
         {/* Actions */}
@@ -66,7 +68,7 @@ export function SiteNav() {
               <circle cx="12" cy="12" r="9" /><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18" />
             </svg>
           </a>
-          <Button href="/briefing" variant="primary" className="hidden px-4 py-2 text-sm sm:inline-flex">Book a briefing</Button>
+          <Button href="/briefing" variant="primary" className="hidden px-4 py-2 text-sm sm:inline-flex">{t("common.bookBriefing")}</Button>
 
           {/* Mobile menu toggle */}
           <button
@@ -86,17 +88,17 @@ export function SiteNav() {
       {menuOpen && (
         <div className="border-t border-ws-border bg-white md:hidden">
           <nav className="mx-auto max-w-7xl px-5 py-3">
-            <p className="px-1 pb-1 pt-2 text-[11px] font-semibold uppercase tracking-wider text-ws-text-dim">Experiences</p>
+            <p className="px-1 pb-1 pt-2 text-[11px] font-semibold uppercase tracking-wider text-ws-text-dim">{t("common.experiences")}</p>
             {EXPERIENCES.map((e) => (
               <Link key={e.href} href={e.href} onClick={() => setMenuOpen(false)} className="block rounded-xl px-3 py-2.5 text-sm text-ws-ink hover:bg-ws-cloud">
                 {e.label}
               </Link>
             ))}
             <div className="my-2 h-px bg-ws-border" />
-            <Link href="/for-teams" onClick={() => setMenuOpen(false)} className="block rounded-xl px-3 py-2.5 text-sm font-medium text-ws-ink hover:bg-ws-cloud">For teams</Link>
-            <Link href="/about" onClick={() => setMenuOpen(false)} className="block rounded-xl px-3 py-2.5 text-sm text-ws-ink hover:bg-ws-cloud">About</Link>
+            <Link href="/for-teams" onClick={() => setMenuOpen(false)} className="block rounded-xl px-3 py-2.5 text-sm font-medium text-ws-ink hover:bg-ws-cloud">{t("common.forTeams")}</Link>
+            <Link href="/about" onClick={() => setMenuOpen(false)} className="block rounded-xl px-3 py-2.5 text-sm text-ws-ink hover:bg-ws-cloud">{t("common.about")}</Link>
             <a href={WEJDENSPIRE_SITE} target="_blank" rel="noopener noreferrer" className="block rounded-xl px-3 py-2.5 text-sm text-ws-ink hover:bg-ws-cloud">wejdenspire.com ↗</a>
-            <Button href="/briefing" variant="primary" className="mt-3 w-full">Book a briefing</Button>
+            <Button href="/briefing" variant="primary" className="mt-3 w-full">{t("common.bookBriefing")}</Button>
           </nav>
         </div>
       )}
@@ -111,10 +113,10 @@ export function SiteFooter() {
         <span className="flex items-center gap-2">
           <BrandMark size={18} />© {new Date().getFullYear()} WejdenSpire — Workforce Wellbeing Intelligence.
         </span>
-        <span className="text-center">Figures shown are illustrative estimates, not measurements or clinical assessments.</span>
+        <span className="text-center">{t("common.estimatesDisclaimer")}</span>
         <div className="flex gap-4">
-          <Link href="/about" className="hover:text-ws-sage">About</Link>
-          <Link href="/briefing" className="hover:text-ws-sage">Briefing</Link>
+          <Link href="/about" className="hover:text-ws-sage">{t("common.about")}</Link>
+          <Link href="/briefing" className="hover:text-ws-sage">{t("common.bookBriefing")}</Link>
           <a href={WEJDENSPIRE_SITE} target="_blank" rel="noopener noreferrer" className="font-medium text-ws-primary hover:text-ws-primary-dark">wejdenspire.com ↗</a>
         </div>
       </div>

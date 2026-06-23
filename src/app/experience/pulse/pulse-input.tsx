@@ -6,6 +6,7 @@ import { submitPulse } from "@/app/actions/pulse";
 import { SignalSlider } from "@/components/ws/signal-slider";
 import { Button, Badge } from "@/components/ws/ui";
 import { LeadModal } from "@/components/ws/lead-modal";
+import { t } from "@/lib/i18n";
 
 export function PulseInput() {
   const [signals, setSignals] = useState({ energy: 50, workload: 50, psychSafety: 50, support: 50, stress: 50 });
@@ -27,19 +28,19 @@ export function PulseInput() {
     return (
       <div className="mx-auto flex min-h-[70vh] max-w-md flex-col items-center justify-center px-5 text-center">
         <div className="text-4xl">✓</div>
-        <h1 className="mt-4 font-display text-2xl font-bold text-ws-ink">Signal added.</h1>
+        <h1 className="mt-4 font-display text-2xl font-bold text-ws-ink">{t("pulse.addedTitle")}</h1>
         <p className="tnum mt-2 text-lg text-ws-sage">
-          You&apos;re participant <span className="font-bold text-ws-primary">#{submitted}</span> of the live pulse.
+          {t("pulse.participant")} <span className="font-bold text-ws-primary">#{submitted}</span> {t("pulse.ofPulse")}
         </p>
-        <p className="mt-4 text-ws-sage">Imagine having this visibility inside your organization — every day.</p>
+        <p className="mt-4 text-ws-sage">{t("pulse.imagine")}</p>
         <div className="mt-6 flex flex-col gap-3">
-          <Button variant="primary" onClick={() => setLeadOpen(true)}>Want this in my org →</Button>
-          <Link href="/pulse/live" className="text-sm text-ws-primary underline">See the live wall</Link>
+          <Button variant="primary" onClick={() => setLeadOpen(true)}>{t("pulse.wantOrg")}</Button>
+          <Link href="/pulse/live" className="text-sm text-ws-primary underline">{t("pulse.seeWall")}</Link>
         </div>
         <LeadModal
           open={leadOpen}
           onClose={() => setLeadOpen(false)}
-          title="Bring this visibility to my organization"
+          title="Apporter cette visibilité à mon organisation"
           sourceExperience="pulse"
           experiencesCompleted={1}
         />
@@ -49,22 +50,22 @@ export function PulseInput() {
 
   return (
     <div className="mx-auto max-w-md px-5 py-10">
-      <Badge color="primary">Experience 05</Badge>
-      <h1 className="mt-3 font-display text-2xl font-bold text-ws-ink">30 seconds. 5 signals.</h1>
-      <p className="mt-1 text-ws-sage">Anonymous. Your input joins the live workforce pulse of the room.</p>
+      <Badge color="primary">{t("pulse.badge")}</Badge>
+      <h1 className="mt-3 font-display text-2xl font-bold text-ws-ink">{t("pulse.title")}</h1>
+      <p className="mt-1 text-ws-sage">{t("pulse.sub")}</p>
 
       <div className="mt-8 space-y-6 rounded-xl border border-ws-border bg-white p-6">
-        <SignalSlider label="Energy level" value={signals.energy} onChange={(v) => setSignals({ ...signals, energy: v })} leftLabel="Depleted" rightLabel="Energized" />
-        <SignalSlider label="Workload pressure" value={signals.workload} higherIsWorse onChange={(v) => setSignals({ ...signals, workload: v })} leftLabel="Manageable" rightLabel="Overwhelming" />
-        <SignalSlider label="Psychological safety" value={signals.psychSafety} onChange={(v) => setSignals({ ...signals, psychSafety: v })} leftLabel="Low" rightLabel="High" />
-        <SignalSlider label="Support" value={signals.support} onChange={(v) => setSignals({ ...signals, support: v })} leftLabel="Unsupported" rightLabel="Well supported" />
-        <SignalSlider label="Stress level" value={signals.stress} higherIsWorse onChange={(v) => setSignals({ ...signals, stress: v })} leftLabel="Calm" rightLabel="High stress" />
+        <SignalSlider label={t("pulse.energy")} value={signals.energy} onChange={(v) => setSignals({ ...signals, energy: v })} leftLabel={t("pulse.energyL")} rightLabel={t("pulse.energyR")} />
+        <SignalSlider label={t("pulse.workload")} value={signals.workload} higherIsWorse onChange={(v) => setSignals({ ...signals, workload: v })} leftLabel={t("pulse.workloadL")} rightLabel={t("pulse.workloadR")} />
+        <SignalSlider label={t("pulse.safety")} value={signals.psychSafety} onChange={(v) => setSignals({ ...signals, psychSafety: v })} leftLabel={t("pulse.safetyL")} rightLabel={t("pulse.safetyR")} />
+        <SignalSlider label={t("pulse.support")} value={signals.support} onChange={(v) => setSignals({ ...signals, support: v })} leftLabel={t("pulse.supportL")} rightLabel={t("pulse.supportR")} />
+        <SignalSlider label={t("pulse.stress")} value={signals.stress} higherIsWorse onChange={(v) => setSignals({ ...signals, stress: v })} leftLabel={t("pulse.stressL")} rightLabel={t("pulse.stressR")} />
       </div>
 
       {error && <p className="mt-3 text-sm text-ws-red">{error}</p>}
 
       <Button variant="primary" className="mt-5 w-full" onClick={submit} disabled={busy}>
-        {busy ? "Adding…" : "Add my signal ▸"}
+        {busy ? t("pulse.adding") : t("pulse.add")}
       </Button>
     </div>
   );

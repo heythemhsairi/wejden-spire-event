@@ -8,14 +8,20 @@ import { Button, Badge, ConversionBridge } from "@/components/ws/ui";
 import { LeadModal } from "@/components/ws/lead-modal";
 import { formatCurrencyCompact, formatCurrencyFull, riskColor } from "@/lib/utils";
 import { useRouter } from "next/navigation";
+import { t } from "@/lib/i18n";
+import type { TurnoverBand } from "@/lib/domain/cost-calculator";
+
+function turnoverBandColor(band: TurnoverBand): string {
+  return band === "Critique" ? "#E06A5C" : band === "Préoccupant" ? "#E0843C" : band === "Acceptable" ? "#E0A23C" : "#4AAA83";
+}
 
 export function CostCalculator() {
   const router = useRouter();
   const [input, setInput] = useState<CostInputs>({
-    employees: 250,
-    turnoverRate: 14,
-    avgSalary: 48000,
-    sickDays: 9.2,
+    employees: 500,
+    turnoverRate: 10,
+    avgSalary: 24000,
+    sickDays: 6,
     industry: "Manufacturing",
   });
   const [leadOpen, setLeadOpen] = useState(false);
@@ -23,29 +29,29 @@ export function CostCalculator() {
   const result = useMemo(() => calculateHiddenCost(input), [input]);
 
   const breakdown = [
-    { label: "Turnover cost", value: result.turnoverCost, color: "#E06A5C" },
-    { label: "Absenteeism", value: result.absenteeismCost, color: "#E0843C" },
-    { label: "Productivity loss", value: result.productivityLoss, color: "#7FAEDB" },
+    { label: t("cost.turnoverCost"), value: result.turnoverCost, color: "#E06A5C" },
+    { label: t("cost.absenteeism"), value: result.absenteeismCost, color: "#E0843C" },
+    { label: t("cost.productivityLoss"), value: result.productivityLoss, color: "#7FAEDB" },
   ];
   const maxBreak = Math.max(...breakdown.map((b) => b.value), 1);
 
   return (
     <div className="mx-auto max-w-7xl px-5 py-10">
       <div className="mb-6">
-        <Badge color="primary">Experience 01</Badge>
-        <h1 className="mt-3 font-display text-3xl font-bold text-ws-ink">Hidden Cost Calculator</h1>
-        <p className="mt-1 text-ws-sage">Adjust the inputs. The report recalculates live.</p>
+        <Badge color="primary">{t("cost.badge")}</Badge>
+        <h1 className="mt-3 font-display text-3xl font-bold text-ws-ink">{t("cost.title")}</h1>
+        <p className="mt-1 text-ws-sage">{t("cost.sub")}</p>
       </div>
 
       <div className="grid gap-6 lg:grid-cols-[minmax(0,360px)_1fr]">
         {/* Input panel */}
         <div className="space-y-5 rounded-xl border border-ws-border bg-white p-6">
-          <NumberInput label="Number of employees" value={input.employees} min={1} max={50000} step={10} onChange={(v) => setInput({ ...input, employees: v })} />
-          <NumberInput label="Turnover rate (%)" value={input.turnoverRate} min={0} max={60} step={0.5} onChange={(v) => setInput({ ...input, turnoverRate: v })} />
-          <NumberInput label="Average salary (€)" value={input.avgSalary} min={10000} max={250000} step={1000} onChange={(v) => setInput({ ...input, avgSalary: v })} fmt={(n) => `€${n.toLocaleString()}`} />
-          <NumberInput label="Sick leave days / employee / yr" value={input.sickDays} min={0} max={40} step={0.1} onChange={(v) => setInput({ ...input, sickDays: v })} />
+          <NumberInput label={t("cost.employees")} value={input.employees} min={1} max={50000} step={10} onChange={(v) => setInput({ ...input, employees: v })} />
+          <NumberInput label={t("cost.turnover")} value={input.turnoverRate} min={0} max={60} step={0.5} onChange={(v) => setInput({ ...input, turnoverRate: v })} />
+          <NumberInput label={t("cost.avgSalary")} value={input.avgSalary} min={6000} max={200000} step={500} onChange={(v) => setInput({ ...input, avgSalary: v })} fmt={(n) => formatCurrencyFull(n)} />
+          <NumberInput label={t("cost.sickDays")} value={input.sickDays} min={0} max={40} step={0.1} onChange={(v) => setInput({ ...input, sickDays: v })} />
           <div>
-            <label className="mb-1.5 block text-xs font-medium uppercase tracking-wider text-ws-sage">Industry</label>
+            <label className="mb-1.5 block text-xs font-medium uppercase tracking-wider text-ws-sage">{t("cost.industry")}</label>
             <select
               value={input.industry}
               onChange={(e) => setInput({ ...input, industry: e.target.value as Industry })}
@@ -59,19 +65,19 @@ export function CostCalculator() {
         {/* Report */}
         <div className="space-y-5">
           <div className="rounded-xl border border-ws-border bg-gradient-to-br from-ws-cloud to-white p-7">
-            <p className="text-xs font-medium uppercase tracking-wider text-ws-sage">Estimated annual hidden cost</p>
+            <p className="text-xs font-medium uppercase tracking-wider text-ws-sage">{t("cost.annualHidden")}</p>
             <div className="tnum mt-2 font-display text-6xl font-bold text-ws-primary sm:text-7xl">
               <CountUp value={result.hiddenAnnualCost} format={formatCurrencyCompact} />
             </div>
             <p className="tnum mt-2 text-sm text-ws-sage">
-              {formatCurrencyFull(result.hiddenAnnualCost)} · {formatCurrencyFull(result.costPerEmployee)} per employee
+              {formatCurrencyFull(result.hiddenAnnualCost)} · {formatCurrencyFull(result.costPerEmployee)} {t("cost.perEmployee")}
             </p>
           </div>
 
           <div className="grid gap-5 sm:grid-cols-2">
             {/* Breakdown */}
             <div className="rounded-xl border border-ws-border bg-white p-6">
-              <h3 className="text-sm font-semibold text-ws-ink">Cost breakdown</h3>
+              <h3 className="text-sm font-semibold text-ws-ink">{t("cost.breakdown")}</h3>
               <div className="mt-4 space-y-3">
                 {breakdown.map((b) => (
                   <div key={b.label}>
@@ -89,29 +95,44 @@ export function CostCalculator() {
 
             {/* Exposure + benchmark */}
             <div className="rounded-xl border border-ws-border bg-white p-6">
-              <h3 className="text-sm font-semibold text-ws-ink">Risk indicators</h3>
+              <h3 className="text-sm font-semibold text-ws-ink">{t("cost.riskIndicators")}</h3>
               <div className="mt-4 space-y-4">
                 <div>
-                  <p className="text-xs uppercase tracking-wider text-ws-sage">Burnout exposure</p>
+                  <p className="text-xs uppercase tracking-wider text-ws-sage">{t("cost.burnoutExposure")}</p>
                   <p className="tnum mt-1 font-display text-2xl font-bold" style={{ color: riskColor(result.burnoutScore) }}>
                     {result.burnoutExposure}
                   </p>
                 </div>
                 <div>
-                  <p className="text-xs uppercase tracking-wider text-ws-sage">vs industry median</p>
-                  <p className="tnum mt-1 font-display text-2xl font-bold text-ws-ink">
-                    {result.benchmarkMultiple >= 1 ? "▲" : "▼"} {result.benchmarkMultiple.toFixed(2)}×
+                  <p className="text-xs uppercase tracking-wider text-ws-sage">{t("cost.turnoverStatus")}</p>
+                  <p className="tnum mt-1 font-display text-2xl font-bold" style={{ color: turnoverBandColor(result.turnoverBand) }}>
+                    {result.turnoverBand}
                   </p>
+                  <p className="tnum mt-0.5 text-xs text-ws-text-dim">{result.turnoverVsMedian.toFixed(1)} {t("cost.vsSectorMedian")}</p>
                 </div>
               </div>
             </div>
           </div>
 
+          {/* Strategic insight (client feedback) */}
+          <div className="rounded-2xl border border-ws-primary/20 bg-ws-soft-green p-5">
+            <p className="text-xs font-semibold uppercase tracking-wider text-ws-primary-dark">{t("cost.insightTitle")}</p>
+            <p className="mt-2 text-sm text-ws-ink">{t("cost.insightReduction")}</p>
+            <p className="mt-2 text-sm text-ws-ink">
+              {t("cost.insightQuickWin", { amount: formatCurrencyFull(result.quickWinSavings) })}
+            </p>
+          </div>
+
           <ConversionBridge />
 
+          {/* Tunisian personalization disclaimer (client feedback) */}
+          <p className="rounded-xl border border-ws-border bg-ws-cloud px-4 py-3 text-xs leading-relaxed text-ws-sage">
+            {t("cost.disclaimerTun")}
+          </p>
+
           <div className="flex flex-wrap gap-3">
-            <Button variant="primary" onClick={() => setLeadOpen(true)}>Get the full report →</Button>
-            <Button variant="ghost" onClick={() => router.push("/experience/risk-scanner")}>Run the Risk Scanner</Button>
+            <Button variant="primary" onClick={() => setLeadOpen(true)}>{t("cost.getReport")}</Button>
+            <Button variant="ghost" onClick={() => router.push("/experience/risk-scanner")}>{t("cost.runScanner")}</Button>
           </div>
         </div>
       </div>

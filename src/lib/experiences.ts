@@ -5,57 +5,65 @@ export interface ExperienceMeta {
   tagline: string;
   href: string;
   hero?: boolean;
-  preview: string; // tiny data hint shown on hover
+  preview: string;
 }
 
 export const EXPERIENCES: ExperienceMeta[] = [
   {
     slug: "cost-calculator",
     number: 1,
-    title: "Hidden Cost Calculator",
-    tagline: "The financial impact of psychosocial risk — in your numbers.",
+    title: "Calculateur de coût caché",
+    tagline: "L'impact financier du risque psychosocial — dans vos chiffres.",
     href: "/experience/cost-calculator",
-    preview: "€1.84M hidden annual cost",
+    preview: "1,84 M DT de coût caché",
   },
   {
     slug: "risk-scanner",
     number: 2,
-    title: "Workforce Risk Scanner",
-    tagline: "A 10-question executive diagnostic. Your Workforce Risk Score.",
+    title: "Scanner de risque des effectifs",
+    tagline: "Un diagnostic exécutif en 10 questions. Votre score de risque.",
     href: "/experience/risk-scanner",
-    preview: "Risk score 0–100",
+    preview: "Score de risque 0–100",
   },
   {
     slug: "dashboard",
     number: 3,
-    title: "Future Workforce Dashboard",
-    tagline: "A simulated CEO terminal for your industry. This is what daily visibility looks like.",
+    title: "Tableau de bord du futur",
+    tagline: "Un terminal PDG simulé pour votre secteur. La visibilité quotidienne.",
     href: "/experience/dashboard",
     hero: true,
-    preview: "6 live risk indices",
+    preview: "6 indices de risque en direct",
   },
   {
     slug: "advisor",
     number: 4,
-    title: "AI Workforce Advisor",
-    tagline: "Consulting-grade answers on workforce risk, cost, and action.",
+    title: "Conseiller IA des effectifs",
+    tagline: "Des réponses de niveau conseil sur le risque, le coût et l'action.",
     href: "/experience/advisor",
-    preview: "Ask anything",
+    preview: "Posez n'importe quelle question",
   },
   {
     slug: "pulse",
     number: 5,
-    title: "Live Human Signal",
-    tagline: "30 seconds. 5 signals. A live workforce pulse of the room.",
+    title: "Signal humain en direct",
+    tagline: "30 secondes. 5 signaux. Le pouls des effectifs de la salle.",
     href: "/experience/pulse",
-    preview: "247 live participants",
+    preview: "247 participants en direct",
   },
   {
     slug: "mood-trends",
     number: 6,
-    title: "Mood Trends",
-    tagline: "10 weeks of workforce affect — the early warning before attrition.",
+    title: "Tendances d'humeur",
+    tagline: "10 semaines d'affect des effectifs — l'alerte précoce avant l'attrition.",
     href: "/experience/mood-trends",
-    preview: "Negative affect ▲ rising",
+    preview: "Affect négatif ▲ en hausse",
+  },
+  {
+    slug: "roi-calculator",
+    number: 7,
+    title: "Calculateur de ROI",
+    tagline: "Combien rapporte l'investissement dans le bien-être ? Le retour, chiffré.",
+    href: "/experience/roi-calculator",
+    preview: "ROI 700 % · retour 1,5 mois",
   },
 ];

@@ -27,37 +27,37 @@ export default function BriefingPage() {
     <div className="min-h-screen bg-ws-hero">
       <SiteNav />
       <div className="mx-auto max-w-2xl px-5 py-16">
-        <h1 className="font-display text-4xl font-bold text-ws-ink">Book an intelligence briefing</h1>
+        <h1 className="font-display text-4xl font-bold text-ws-ink">Réserver un briefing</h1>
         <p className="mt-3 text-lg text-ws-sage">
-          A 30-minute executive walkthrough of what continuous workforce-risk visibility looks like
-          inside an organization like yours.
+          Une présentation exécutive de 30 minutes pour découvrir à quoi ressemble une visibilité
+          continue du risque des effectifs au sein d&apos;une organisation comme la vôtre.
         </p>
 
         <Card className="mt-8 p-6">
           {done ? (
             <div className="py-8 text-center">
               <div className="text-3xl">✓</div>
-              <h2 className="mt-3 font-display text-xl font-semibold text-ws-ink">Request received.</h2>
-              <p className="mt-1 text-ws-sage">We&apos;ll reach out to {form.email} to schedule your briefing.</p>
+              <h2 className="mt-3 font-display text-xl font-semibold text-ws-ink">Demande reçue.</h2>
+              <p className="mt-1 text-ws-sage">Nous vous contacterons à {form.email} pour planifier votre briefing.</p>
             </div>
           ) : (
             <form onSubmit={submit} className="space-y-4">
-              <Input label="Full name" value={form.fullName} onChange={(v) => setForm({ ...form, fullName: v })} required />
-              <Input label="Work email" type="email" value={form.email} onChange={(v) => setForm({ ...form, email: v })} required />
-              <Input label="Company" value={form.company} onChange={(v) => setForm({ ...form, company: v })} />
+              <Input label="Nom complet" value={form.fullName} onChange={(v) => setForm({ ...form, fullName: v })} required />
+              <Input label="E-mail professionnel" type="email" value={form.email} onChange={(v) => setForm({ ...form, email: v })} required />
+              <Input label="Entreprise" value={form.company} onChange={(v) => setForm({ ...form, company: v })} />
               <div>
-                <label className="mb-1 block text-xs font-medium uppercase tracking-wider text-ws-sage">Role</label>
+                <label className="mb-1 block text-xs font-medium uppercase tracking-wider text-ws-sage">Fonction</label>
                 <select value={form.role} onChange={(e) => setForm({ ...form, role: e.target.value })} className="w-full rounded-lg border border-ws-border bg-ws-cloud px-3 py-2.5 text-sm text-ws-ink outline-none focus:border-ws-primary">
-                  <option value="">Select…</option>
+                  <option value="">Sélectionner…</option>
                   {ROLES.map((r) => <option key={r} value={r}>{r}</option>)}
                 </select>
               </div>
               <label className="flex items-start gap-2 text-xs text-ws-sage">
                 <input type="checkbox" checked={consent} onChange={(e) => setConsent(e.target.checked)} className="mt-0.5 accent-ws-primary" />
-                <span>I agree to be contacted by WejdenSpire. (GDPR consent)</span>
+                <span>J&apos;accepte d&apos;être contacté(e) par WejdenSpire. (Consentement RGPD)</span>
               </label>
               {error && <p className="text-xs text-ws-red">{error}</p>}
-              <Button type="submit" variant="primary" className="w-full" disabled={busy}>{busy ? "Sending…" : "Request briefing →"}</Button>
+              <Button type="submit" variant="primary" className="w-full" disabled={busy}>{busy ? "Envoi…" : "Demander un briefing →"}</Button>
             </form>
           )}
         </Card>
