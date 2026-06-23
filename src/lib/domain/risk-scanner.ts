@@ -1,11 +1,11 @@
 /** Workforce Risk Scanner (Experience 2): 10 questions, 5 categories. */
 
 export type RiskCategory =
-  | "Burnout Risk"
-  | "Turnover Risk"
-  | "Organizational Visibility"
-  | "Workforce Intelligence Maturity"
-  | "Leadership Readiness";
+  | "Risque d'épuisement"
+  | "Risque de rotation"
+  | "Visibilité organisationnelle"
+  | "Maturité de l'intelligence des effectifs"
+  | "Préparation du leadership";
 
 export interface ScanQuestion {
   id: string;
@@ -18,111 +18,111 @@ export interface ScanQuestion {
 export const SCAN_QUESTIONS: ScanQuestion[] = [
   {
     id: "q1",
-    category: "Burnout Risk",
-    text: "Can your leadership see burnout building before someone resigns?",
-    options: ["No — we find out when they quit", "Anecdotally, manager by manager", "We run periodic surveys", "We track leading indicators", "We have real-time burnout exposure signals"],
+    category: "Risque d'épuisement",
+    text: "Votre direction peut-elle voir l'épuisement monter avant qu'une personne ne démissionne ?",
+    options: ["Non — nous l'apprenons quand la personne part", "De façon anecdotique, manager par manager", "Nous menons des enquêtes périodiques", "Nous suivons des indicateurs avancés", "Nous disposons de signaux d'exposition à l'épuisement en temps réel"],
   },
   {
     id: "q2",
-    category: "Burnout Risk",
-    text: "How do you currently detect chronic workload overload across teams?",
-    options: ["We don't", "Complaints reach us informally", "Annual engagement survey", "Quarterly pulse + manager check-ins", "Continuous workload & overload indices"],
+    category: "Risque d'épuisement",
+    text: "Comment détectez-vous aujourd'hui la surcharge de travail chronique au sein des équipes ?",
+    options: ["Nous ne le détectons pas", "Les plaintes nous parviennent de façon informelle", "Enquête d'engagement annuelle", "Sondage trimestriel + points avec les managers", "Indices continus de charge et de surcharge de travail"],
   },
   {
     id: "q3",
-    category: "Turnover Risk",
-    text: "How far in advance can you predict regretted attrition?",
-    options: ["We can't predict it", "We react after resignations", "Exit interviews tell us why", "We model flight-risk by team", "We forecast attrition with leading signals"],
+    category: "Risque de rotation",
+    text: "Combien de temps à l'avance pouvez-vous prédire un départ regretté ?",
+    options: ["Nous ne pouvons pas le prédire", "Nous réagissons après les démissions", "Les entretiens de départ nous en donnent les raisons", "Nous modélisons le risque de départ par équipe", "Nous anticipons les départs grâce à des signaux avancés"],
   },
   {
     id: "q4",
-    category: "Turnover Risk",
-    text: "Do you know which teams are at highest turnover risk right now?",
-    options: ["No visibility", "Gut feel from managers", "Last year's turnover report", "A current risk register", "Live, ranked turnover-risk by unit"],
+    category: "Risque de rotation",
+    text: "Savez-vous quelles équipes présentent actuellement le risque de rotation le plus élevé ?",
+    options: ["Aucune visibilité", "Au ressenti des managers", "Le rapport de rotation de l'an dernier", "Un registre des risques à jour", "Risque de rotation classé en direct par unité"],
   },
   {
     id: "q5",
-    category: "Organizational Visibility",
-    text: "How visible are psychosocial risks to your executive team?",
-    options: ["Invisible", "Only when there's a crisis", "Summarized once a year", "Reviewed each quarter", "On the executive dashboard continuously"],
+    category: "Visibilité organisationnelle",
+    text: "Dans quelle mesure les risques psychosociaux sont-ils visibles pour votre comité de direction ?",
+    options: ["Invisibles", "Uniquement en cas de crise", "Synthétisés une fois par an", "Examinés chaque trimestre", "En continu sur le tableau de bord de la direction"],
   },
   {
     id: "q6",
-    category: "Organizational Visibility",
-    text: "Can you compare wellbeing & risk signals across departments?",
-    options: ["No", "Only headcount/cost", "Some HR metrics", "Cross-department engagement data", "Normalized risk indices per department"],
+    category: "Visibilité organisationnelle",
+    text: "Pouvez-vous comparer les signaux de bien-être et de risque d'un département à l'autre ?",
+    options: ["Non", "Uniquement les effectifs et les coûts", "Quelques indicateurs RH", "Données d'engagement inter-départements", "Indices de risque normalisés par département"],
   },
   {
     id: "q7",
-    category: "Workforce Intelligence Maturity",
-    text: "How data-driven are your people decisions today?",
-    options: ["Mostly intuition", "Basic HR reporting", "Dashboards for lagging metrics", "Some predictive analytics", "Decision support from leading indicators"],
+    category: "Maturité de l'intelligence des effectifs",
+    text: "À quel point vos décisions relatives aux collaborateurs sont-elles fondées sur les données aujourd'hui ?",
+    options: ["Essentiellement à l'intuition", "Reporting RH de base", "Tableaux de bord d'indicateurs rétrospectifs", "Quelques analyses prédictives", "Aide à la décision fondée sur des indicateurs avancés"],
   },
   {
     id: "q8",
-    category: "Workforce Intelligence Maturity",
-    text: "Do you quantify the business cost of psychosocial risk?",
-    options: ["Never", "We assume it's small", "We've estimated it once", "We track it annually", "We monitor it as a live business metric"],
+    category: "Maturité de l'intelligence des effectifs",
+    text: "Quantifiez-vous le coût économique du risque psychosocial ?",
+    options: ["Jamais", "Nous supposons qu'il est faible", "Nous l'avons estimé une fois", "Nous le suivons chaque année", "Nous le pilotons comme un indicateur économique en direct"],
   },
   {
     id: "q9",
-    category: "Leadership Readiness",
-    text: "How equipped are managers to act on early risk signals?",
-    options: ["Not at all", "Reactive only", "Trained but no data", "Data + playbooks", "Real-time signals + guided actions"],
+    category: "Préparation du leadership",
+    text: "Dans quelle mesure les managers sont-ils outillés pour agir sur les signaux de risque précoces ?",
+    options: ["Pas du tout", "Uniquement en réaction", "Formés mais sans données", "Données + plans d'action", "Signaux en temps réel + actions guidées"],
   },
   {
     id: "q10",
-    category: "Leadership Readiness",
-    text: "Is workforce wellbeing tied to executive accountability & KPIs?",
-    options: ["No", "Mentioned in values", "Tracked informally", "A board-level topic", "A KPI with owners and targets"],
+    category: "Préparation du leadership",
+    text: "Le bien-être des effectifs est-il lié à la responsabilité des dirigeants et aux KPI ?",
+    options: ["Non", "Mentionné dans les valeurs", "Suivi de façon informelle", "Un sujet au niveau du conseil", "Un KPI avec des responsables et des objectifs"],
   },
 ];
 
 const CATEGORIES: RiskCategory[] = [
-  "Burnout Risk",
-  "Turnover Risk",
-  "Organizational Visibility",
-  "Workforce Intelligence Maturity",
-  "Leadership Readiness",
+  "Risque d'épuisement",
+  "Risque de rotation",
+  "Visibilité organisationnelle",
+  "Maturité de l'intelligence des effectifs",
+  "Préparation du leadership",
 ];
 
 // Visibility & Maturity weighted higher — they predict capacity to act.
 const WEIGHTS: Record<RiskCategory, number> = {
-  "Burnout Risk": 1,
-  "Turnover Risk": 1,
-  "Organizational Visibility": 1.25,
-  "Workforce Intelligence Maturity": 1.25,
-  "Leadership Readiness": 1.15,
+  "Risque d'épuisement": 1,
+  "Risque de rotation": 1,
+  "Visibilité organisationnelle": 1.25,
+  "Maturité de l'intelligence des effectifs": 1.25,
+  "Préparation du leadership": 1.15,
 };
 
 export interface ScanResult {
   overall: number; // 0–100 (higher = more mature / lower risk)
-  band: "Critical" | "Elevated" | "Developing" | "Mature";
+  band: "Critique" | "Élevé" | "En développement" | "Mature";
   categories: { category: RiskCategory; score: number }[];
   weakest: RiskCategory[];
   recommendations: string[];
 }
 
 const RECOMMENDATIONS: Record<RiskCategory, string> = {
-  "Burnout Risk":
-    "Stand up continuous burnout-exposure signals so you see overload building weeks before resignations — not after.",
-  "Turnover Risk":
-    "Move from exit interviews to leading flight-risk indicators, ranked by team, so retention action is proactive.",
-  "Organizational Visibility":
-    "Put normalized psychosocial-risk indices on the executive dashboard so risk is visible at board altitude, continuously.",
-  "Workforce Intelligence Maturity":
-    "Quantify the business cost of psychosocial risk as a live metric to anchor people decisions in financial impact.",
-  "Leadership Readiness":
-    "Equip managers with real-time signals and guided next actions, and tie wellbeing to executive KPIs with named owners.",
+  "Risque d'épuisement":
+    "Déployez des signaux continus d'exposition à l'épuisement afin de voir la surcharge monter des semaines avant les démissions — et non après.",
+  "Risque de rotation":
+    "Passez des entretiens de départ à des indicateurs avancés de risque de départ, classés par équipe, pour rendre la rétention proactive.",
+  "Visibilité organisationnelle":
+    "Affichez des indices de risque psychosocial normalisés sur le tableau de bord de la direction afin que le risque soit visible au niveau du conseil, en continu.",
+  "Maturité de l'intelligence des effectifs":
+    "Quantifiez le coût économique du risque psychosocial comme un indicateur en direct pour ancrer les décisions RH dans leur impact financier.",
+  "Préparation du leadership":
+    "Outillez les managers avec des signaux en temps réel et des actions guidées, et liez le bien-être aux KPI des dirigeants avec des responsables désignés.",
 };
 
 export function scoreScan(answers: Record<string, number>): ScanResult {
   const byCat: Record<RiskCategory, number[]> = {
-    "Burnout Risk": [],
-    "Turnover Risk": [],
-    "Organizational Visibility": [],
-    "Workforce Intelligence Maturity": [],
-    "Leadership Readiness": [],
+    "Risque d'épuisement": [],
+    "Risque de rotation": [],
+    "Visibilité organisationnelle": [],
+    "Maturité de l'intelligence des effectifs": [],
+    "Préparation du leadership": [],
   };
   for (const q of SCAN_QUESTIONS) {
     const v = answers[q.id];
@@ -141,7 +141,7 @@ export function scoreScan(answers: Record<string, number>): ScanResult {
   );
 
   const band =
-    overall >= 80 ? "Mature" : overall >= 60 ? "Developing" : overall >= 40 ? "Elevated" : "Critical";
+    overall >= 80 ? "Mature" : overall >= 60 ? "En développement" : overall >= 40 ? "Élevé" : "Critique";
 
   const weakest = [...categories]
     .sort((a, b) => a.score - b.score)
